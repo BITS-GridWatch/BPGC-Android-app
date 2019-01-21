@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "373964646119",
+    "firebase_url": "https://gridwatch-15a55.firebaseio.com",
+    "project_id": "gridwatch-15a55",
+    "storage_bucket": "gridwatch-15a55.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:373964646119:android:974f14a6d3ed13ce",
+        "android_client_info": {
+          "package_name": "com.macbitsgoa.bitsgridwatch.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "373964646119-unitaae7v3oqhkvcnrcvfsgcc1n57u2k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.macbitsgoa.bitsgridwatch.debug",
+            "certificate_hash": "691c9e26f5d642b23fe6899c9a699cd2645fd639"
+          }
+        },
+        {
+          "client_id": "373964646119-a2ae1cqo9rd6uftk70jv0e13jkec9s8d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5apTy4Azlqkwfvh5ykhysF5tXw9L7EbE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "373964646119-a2ae1cqo9rd6uftk70jv0e13jkec9s8d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
