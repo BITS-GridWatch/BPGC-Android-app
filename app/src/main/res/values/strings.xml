@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">BITSGridWatch</string>
+
+    //BottomNav titles
+    <string name="bottomnav_home">Home</string>
+    <string name="bottomnav_settings">Settings</string>
+
 </resources>
