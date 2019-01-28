@@ -14,9 +14,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 public class MainActivity extends AppCompatActivity {
 
-    BottomNavigationView bottomNav;
-    FrameLayout frameLayout;
-    Fragment selectedFragment = null;
+    private BottomNavigationView bottomNav;
+    private FrameLayout frameLayout;
+    private Fragment selectedFragment = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     default:
                         selectedFragment = HomeFragment.newInstance();
+                        break;
                 }
                 FragmentTransaction transacion = getSupportFragmentManager().beginTransaction();
                 transacion.replace(R.id.framelayout_activity_main, selectedFragment);
