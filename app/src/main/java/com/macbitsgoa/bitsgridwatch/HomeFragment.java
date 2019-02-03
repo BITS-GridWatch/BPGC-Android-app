@@ -3,6 +3,7 @@ package com.macbitsgoa.bitsgridwatch;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -108,16 +109,19 @@ public class HomeFragment extends Fragment {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.e("HomeFragment","Permission granted");
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
 
                 } else {
+                    Log.e("HomeFragment","Permission denied");
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }
 
             }
-
+            default:
+                break;
             // other 'case' lines to check for other
             // permissions this app might request.
         }
