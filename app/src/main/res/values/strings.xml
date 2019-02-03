@@ -8,4 +8,5 @@
     <string name="username">Username</string>
     <string name="status">Status</string>
     <string name="monitor">Allow Monitoring?</string>
+    <string name="map_api">AIzaSyBX-c0oVJZDt8gwtoqGppDS7PABK9BU1zQ</string>
 </resources>

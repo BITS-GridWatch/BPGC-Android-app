@@ -23,29 +23,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        bottomNav = (BottomNavigationView) findViewById(R.id.bottomnav_activity_main);
-        frameLayout = (FrameLayout) findViewById(R.id.framelayout_activity_main);
+        bottomNav = findViewById(R.id.bottomnav_activity_main);
+        frameLayout = findViewById(R.id.framelayout_activity_main);
 
         bottomNav.setSelectedItemId(R.id.item_bottomnav_home);
-        bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.item_bottomnav_home:
-                        selectedFragment = HomeFragment.newInstance();
-                        break;
-                    case R.id.item_bottomnav_settings:
-                        selectedFragment = SettingsFragment.newInstance();
-                        break;
-                    default:
-                        selectedFragment = HomeFragment.newInstance();
-                        break;
-                }
-                FragmentTransaction transacion = getSupportFragmentManager().beginTransaction();
-                transacion.replace(R.id.framelayout_activity_main, selectedFragment);
-                transacion.commit();
-                return true;
+        bottomNav.setOnNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.item_bottomnav_home:
+                    selectedFragment = HomeFragment.newInstance();
+                    break;
+                case R.id.item_bottomnav_settings:
+                    selectedFragment = SettingsFragment.newInstance();
+                    break;
+                default:
+                    selectedFragment = HomeFragment.newInstance();
+                    break;
             }
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.framelayout_activity_main, selectedFragment);
+            transaction.commit();
+            return true;
         });
     }
 
