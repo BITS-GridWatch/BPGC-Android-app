@@ -5,10 +5,14 @@
         android:id="@+id/item_bottomnav_home"
         android:enabled="true"
         android:title="@string/bottomnav_home"
+        android:icon="@drawable/home_icon"
+        android:iconTint="#ffffff"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/item_bottomnav_settings"
         android:enabled="true"
         android:title="@string/bottomnav_settings"
+        android:icon="@drawable/settings_icon"
+        android:iconTint="#ffffff"
         app:showAsAction="ifRoom"/>
 </menu>

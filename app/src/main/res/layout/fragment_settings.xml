@@ -39,5 +39,28 @@
             android:layout_margin="20dp"/>
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="20dp">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_signin_settings"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/signin"
+            android:layout_marginEnd="10dp"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_signout_settings"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/signout"
+            android:layout_marginStart="10dp"/>
+    </LinearLayout>
+
+
 
 </LinearLayout>

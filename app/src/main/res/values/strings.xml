@@ -8,5 +8,13 @@
     <string name="username">Username</string>
     <string name="status">Status</string>
     <string name="monitor">Allow Monitoring?</string>
+    <string name="signin">Sign In</string>
+    <string name="signout">Sign Out</string>
+    <string name="signedin">Signed In</string>
+    <string name="signedout">Signed Out</string>
+    <string name="guest">Guest</string>
+
     <string name="map_api">AIzaSyBX-c0oVJZDt8gwtoqGppDS7PABK9BU1zQ</string>
+    <string name="web_client_id">373964646119-iasuiaj9r2tigh2rnlap3ucfao7v8idc.apps.googleusercontent.com</string>
+
 </resources>
