@@ -82,6 +82,7 @@ public class PowerConnectionReceiver extends BroadcastReceiver implements Locati
                             longitude = String.valueOf(location.getLongitude());
                             // Logic to handle location object
                         }
+
                     }
                 });
 
@@ -139,12 +140,12 @@ public class PowerConnectionReceiver extends BroadcastReceiver implements Locati
 
 
         // push data to firebase
-
-        chargingstate.setValue(isCharging);
-        Latitude.setValue(latitude);
-        Longitude.setValue(longitude);
-        Time.setValue(timevalue);
-
+        if (latitude != null && longitude != null) {
+            chargingstate.setValue(isCharging);
+            Latitude.setValue(latitude);
+            Longitude.setValue(longitude);
+            Time.setValue(timevalue);
+        }
 
     }
 
