@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/item_bottomnav_home"
+        android:enabled="true"
+        android:title="@string/bottomnav_home"
+        android:icon="@drawable/home_icon"
+        android:iconTint="#ffffff"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/item_bottomnav_settings"
+        android:enabled="true"
+        android:title="@string/bottomnav_settings"
+        android:icon="@drawable/settings_icon"
+        android:iconTint="#ffffff"
+        app:showAsAction="ifRoom"/>
+</menu>
