@@ -17,6 +17,11 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,15 +33,19 @@ public class HomeFragment extends Fragment {
     private MapView mMapView;
     private GoogleMap googleMap;
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 434;
+    private DatabaseReference database;
+    private final LatLng centre = new LatLng(15.389557, 73.876974);
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         //-------------------------------
         //Initialize layout elements here
         //-------------------------------
 
+        database = FirebaseDatabase.getInstance().getReference().child("Status");
         mMapView = view.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
 
@@ -88,17 +97,64 @@ public class HomeFragment extends Fragment {
                 }
                 googleMap.setMyLocationEnabled(true);
 
-                // For dropping a marker at a point on the Map
-                LatLng sydney = new LatLng(-34, 151);
-                googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker Title").snippet("Marker Description"));
+                mapData(googleMap);
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centre, 0));
+
+
+                /*LatLng BITS = new LatLng(15.39, 73.88);
+                googleMap.addMarker(new MarkerOptions().position(BITS).title("BITS Pilani Goa")
+                        .snippet("Test Power Markings"));*/
 
                 // For zooming automatically to the location of the marker
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(centre)
+                        .zoom(16f).tilt(10).build();
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             }
         });
 
         return view;
+    }
+
+    private void mapData(GoogleMap googleMap) {
+
+        database.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                Log.e("HomeFragment", "record");
+                for (DataSnapshot child :
+                        dataSnapshot.getChildren()) {
+                    long lastChild = child.getChildrenCount();
+                    int i = 0;
+                    Log.e("HomeFragment", "record" + child.getKey());
+
+                    for (DataSnapshot grandChild : child.getChildren()) {
+                        Log.e("HomeFragment", "record" + grandChild.getKey());
+                        if (i == (lastChild - 1)) {
+                            String lat = grandChild.child("Latitude").getValue(String.class);
+                            String lon = grandChild.child("Longitude").getValue(String.class);
+                            Boolean chargingState = grandChild.child("ChargingState")
+                                    .getValue(Boolean.class);
+                            Log.e("HomeFragment", "record" + lat + " " + lon + " " + chargingState);
+                            if (chargingState != null && chargingState) {
+                                // For dropping a marker at a point on the Map
+                                LatLng powerMarker = new LatLng(Double.parseDouble(lat),
+                                        Double.parseDouble(lon));
+                                googleMap.addMarker(new MarkerOptions().position(powerMarker)
+                                        .title("Power supply").snippet("Detected here"));
+                            }
+                        }
+                        i++;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("Home Fragment", "error" + databaseError.toString());
+            }
+        });
+
     }
 
     @Override
@@ -109,12 +165,12 @@ public class HomeFragment extends Fragment {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.e("HomeFragment","Permission granted");
+                    Log.e("HomeFragment", "Permission granted");
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
 
                 } else {
-                    Log.e("HomeFragment","Permission denied");
+                    Log.e("HomeFragment", "Permission denied");
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }

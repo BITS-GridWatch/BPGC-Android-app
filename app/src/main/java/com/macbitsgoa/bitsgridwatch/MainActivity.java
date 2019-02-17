@@ -1,7 +1,6 @@
 package com.macbitsgoa.bitsgridwatch;
 
 
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
@@ -46,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 434;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         } else {
             // Permission has already been granted
-            Log.e("MainActivity","Permission granted");
+            Log.e("MainActivity", "Permission granted");
 
             //   googleMap.setMyLocationEnabled(true);
         }
@@ -98,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Initialize last signed in user
         userAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
-        if(userAccount != null)
+        if (userAccount != null)
             signedInStatus = true;
         else
             signedInStatus = false;
@@ -132,11 +130,9 @@ public class MainActivity extends AppCompatActivity {
         Intent batteryStatus = registerReceiver(null, ifilter);
 
         PowerConnectionReceiver powerConnectionReceiver = new PowerConnectionReceiver();
-        powerConnectionReceiver.onReceive(getApplicationContext(),batteryStatus);
+        powerConnectionReceiver.onReceive(getApplicationContext(), batteryStatus);
 
-        registerReceiver(powerConnectionReceiver,new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-
-
+        registerReceiver(powerConnectionReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 
 
     }
@@ -150,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.framelayout_activity_main, HomeFragment.newInstance());
         transaction.commit();
 
-        if(!signedInStatus){
+        if (!signedInStatus) {
             userSignIn();
         }
     }
@@ -165,11 +161,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == RC_SIGN_IN){
+        if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
         }
     }
+
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             userAccount = completedTask.getResult(ApiException.class);
@@ -183,11 +180,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public Boolean getSignedInStatus(){
+    public Boolean getSignedInStatus() {
         return signedInStatus;
     }
 
-    public void setSignedInStatus(Boolean newStatus){
+    public void setSignedInStatus(Boolean newStatus) {
         signedInStatus = newStatus;
     }
 
@@ -195,16 +192,17 @@ public class MainActivity extends AppCompatActivity {
         return userAccount;
     }
 
-    public void userSignOut(){
+    public void userSignOut() {
         googleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                Toast.makeText(MainActivity.this,"Successfully Signed Out!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Successfully Signed Out!", Toast.LENGTH_SHORT).show();
             }
         });
         setSignedInStatus(false);
         userAccount = null;
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -213,12 +211,12 @@ public class MainActivity extends AppCompatActivity {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.e("MainActivity","Permission granted");
+                    Log.e("MainActivity", "Permission granted");
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
 
                 } else {
-                    Log.e("HomeFragment","Permission denied");
+                    Log.e("HomeFragment", "Permission denied");
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }

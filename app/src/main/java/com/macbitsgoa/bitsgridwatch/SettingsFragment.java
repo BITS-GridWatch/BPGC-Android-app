@@ -26,7 +26,7 @@ public class SettingsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_settings,container,false);
+        View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
         //-------------------------------
         //Initialize layout elements here
@@ -36,23 +36,20 @@ public class SettingsFragment extends Fragment {
         Button signInButton = view.findViewById(R.id.button_signin_settings);
 
 
-
-
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!((MainActivity)getActivity()).getSignedInStatus()){
-                    ((MainActivity)getActivity()).userSignIn();
+                if (!((MainActivity) getActivity()).getSignedInStatus()) {
+                    ((MainActivity) getActivity()).userSignIn();
                     updateUser();
-                }
-                else
-                    Toast.makeText(getContext(),"Already Signed In!",Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(getContext(), "Already Signed In!", Toast.LENGTH_SHORT).show();
             }
         });
         signOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).userSignOut();
+                ((MainActivity) getActivity()).userSignOut();
                 usernameTextView.setText(R.string.guest);
             }
         });
@@ -72,13 +69,13 @@ public class SettingsFragment extends Fragment {
         updateUser();
     }
 
-    public static SettingsFragment newInstance(){
+    public static SettingsFragment newInstance() {
         return new SettingsFragment();
     }
 
-    private void updateUser(){
+    private void updateUser() {
         GoogleSignInAccount userAccount = ((MainActivity) getActivity()).getUserAccount();
-        if(userAccount !=null)
+        if (userAccount != null)
             usernameTextView.setText(userAccount.getDisplayName());
         else
             usernameTextView.setText(R.string.guest);

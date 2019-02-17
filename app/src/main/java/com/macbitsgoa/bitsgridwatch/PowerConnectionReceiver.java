@@ -76,8 +76,6 @@ public class PowerConnectionReceiver extends BroadcastReceiver implements Locati
                     public void onSuccess(Location location) {
                         // Got last known location. In some rare situations this can be null.
                         if (location != null) {
-
-
                             latitude = String.valueOf(location.getLatitude());
                             longitude = String.valueOf(location.getLongitude());
                             // Logic to handle location object
