@@ -1,5 +1,6 @@
 package com.macbitsgoa.bitsgridwatch;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,10 +19,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class SettingsFragment extends Fragment {
 
     private TextView usernameTextView;
-
+    SharedPreferences.Editor editor;
 
     @Nullable
     @Override
@@ -34,7 +37,8 @@ public class SettingsFragment extends Fragment {
         usernameTextView = view.findViewById(R.id.textview_username_settings);
         Button signOutButton = view.findViewById(R.id.button_signout_settings);
         Button signInButton = view.findViewById(R.id.button_signin_settings);
-
+        Switch allowSwitch= view.findViewById(R.id.switch_monitor_settings);
+        editor = getContext().getSharedPreferences("AllowMoniSharedPref", MODE_PRIVATE).edit();
 
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,6 +57,13 @@ public class SettingsFragment extends Fragment {
                 usernameTextView.setText(R.string.guest);
             }
         });
+        boolean switchState = allowSwitch.isChecked();
+        if(switchState){
+            editor.putBoolean("allow",true);
+        }
+        else {
+            editor.putBoolean("allow", false);
+        }
         return view;
     }
 

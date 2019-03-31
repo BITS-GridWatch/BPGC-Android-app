@@ -23,6 +23,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -35,6 +41,7 @@ public class HomeFragment extends Fragment {
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 434;
     private DatabaseReference database;
     private final LatLng centre = new LatLng(15.389557, 73.876974);
+    private Date currentTime = Calendar.getInstance().getTime();
 
     @Nullable
     @Override
@@ -129,19 +136,38 @@ public class HomeFragment extends Fragment {
                     Log.e("HomeFragment", "record" + child.getKey());
 
                     for (DataSnapshot grandChild : child.getChildren()) {
+
                         Log.e("HomeFragment", "record" + grandChild.getKey());
-                        if (i == (lastChild - 1)) {
-                            String lat = grandChild.child("Latitude").getValue(String.class);
-                            String lon = grandChild.child("Longitude").getValue(String.class);
-                            Boolean chargingState = grandChild.child("ChargingState")
-                                    .getValue(Boolean.class);
-                            Log.e("HomeFragment", "record" + lat + " " + lon + " " + chargingState);
-                            if (chargingState != null && chargingState) {
-                                // For dropping a marker at a point on the Map
-                                LatLng powerMarker = new LatLng(Double.parseDouble(lat),
-                                        Double.parseDouble(lon));
-                                googleMap.addMarker(new MarkerOptions().position(powerMarker)
-                                        .title("Power supply").snippet("Detected here"));
+                        if (i == (lastChild - 1) ) {
+                            String time = grandChild.child("Time").getValue(String.class);
+                            String type = grandChild.child("Type").getValue(String.class);
+                            int diff =0;
+                            try {
+                                Date dateFb = new SimpleDateFormat("E MMM dd HH:mm:ss z yyyy",
+                                        Locale.ENGLISH).parse(time);
+                                diff = printDifference(currentTime, dateFb);
+                                Log.e("HomeFragment", "dates"+currentTime+" "+dateFb+" "+diff);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            assert type != null;
+                            if(diff<=1 && diff>=0 && type.equalsIgnoreCase("AC")) {
+
+                                String lat = grandChild.child("Latitude").getValue(String.class);
+                                String lon = grandChild.child("Longitude").getValue(String.class);
+                                Boolean chargingState = grandChild.child("ChargingState")
+                                        .getValue(Boolean.class);
+
+                                Log.e("HomeFragment", "record" + lat + " " + lon + " " + chargingState);
+                                if (chargingState != null && chargingState) {
+                                    // For dropping a marker at a point on the Map
+                                    LatLng powerMarker = new LatLng(Double.parseDouble(lat),
+                                            Double.parseDouble(lon));
+                                    assert time != null;
+                                    googleMap.addMarker(new MarkerOptions().position(powerMarker)
+                                            .title("Power supply detected")
+                                            .snippet("at " + time.substring(0, 16) + ""));
+                                }
                             }
                         }
                         i++;
@@ -219,5 +245,28 @@ public class HomeFragment extends Fragment {
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
+    }
+
+    public int printDifference(Date startDate, Date endDate) {
+        //milliseconds
+        long different = endDate.getTime() - startDate.getTime();
+
+        long secondsInMilli = 1000;
+        long minutesInMilli = secondsInMilli * 60;
+        long hoursInMilli = minutesInMilli * 60;
+        long daysInMilli = hoursInMilli * 24;
+
+        long elapsedDays = different / daysInMilli;
+        different = different % daysInMilli;
+
+        long elapsedHours = different / hoursInMilli;
+        different = different % hoursInMilli;
+
+        long elapsedMinutes = different / minutesInMilli;
+        different = different % minutesInMilli;
+
+        long elapsedSeconds = different / secondsInMilli;
+
+        return (int) elapsedDays;
     }
 }

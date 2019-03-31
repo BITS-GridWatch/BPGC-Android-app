@@ -36,7 +36,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/switch_monitor_settings"
             android:layout_weight="1"
-            android:layout_margin="20dp"/>
+            android:layout_margin="20dp"
+            android:checked="true"/>
 
 
     </LinearLayout>
