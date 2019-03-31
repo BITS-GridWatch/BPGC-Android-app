@@ -40,7 +40,7 @@ public class UploadPowerDataWorker extends Worker implements LocationListener {
     private LocationManager locationManager;
     private String latitude, longitude;
     private Location loc;
-    private String type="";
+    private String type = "";
 
     //declare and initialise time variables
     private Date currentTime = Calendar.getInstance().getTime();
@@ -76,11 +76,11 @@ public class UploadPowerDataWorker extends Worker implements LocationListener {
         int chargePlug = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
         boolean usbCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_USB;
         boolean acCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_AC;
-        if(usbCharge){
-            type="USB";
+        if (usbCharge) {
+            type = "USB";
         }
-        if(acCharge){
-            type="AC";
+        if (acCharge) {
+            type = "AC";
         }
 
         Log.e("workM", "charging type " + usbCharge + " " + acCharge);
@@ -93,7 +93,6 @@ public class UploadPowerDataWorker extends Worker implements LocationListener {
 
         }
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
-
 
 
         //get user id
@@ -152,11 +151,13 @@ public class UploadPowerDataWorker extends Worker implements LocationListener {
                     latitudeFb.setValue(latitude);
                     longitudeFb.setValue(longitude);
                     timeFb.setValue(timevalue);
-                    typeFb.setValue(type);
+                    if (isCharging)
+                        typeFb.setValue(type);
+                    else
+                        typeFb.setValue("");
                     Log.e("workM", "sent to fb ");
 
-                }
-                else {
+                } else {
                     Log.e("workM", "retry");
                 }
 

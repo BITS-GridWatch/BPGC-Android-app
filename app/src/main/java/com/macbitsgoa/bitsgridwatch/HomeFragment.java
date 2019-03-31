@@ -138,20 +138,20 @@ public class HomeFragment extends Fragment {
                     for (DataSnapshot grandChild : child.getChildren()) {
 
                         Log.e("HomeFragment", "record" + grandChild.getKey());
-                        if (i == (lastChild - 1) ) {
+                        if (i == (lastChild - 1)) {
                             String time = grandChild.child("Time").getValue(String.class);
                             String type = grandChild.child("Type").getValue(String.class);
-                            int diff =0;
+                            int diff = 0;
                             try {
                                 Date dateFb = new SimpleDateFormat("E MMM dd HH:mm:ss z yyyy",
                                         Locale.ENGLISH).parse(time);
                                 diff = printDifference(currentTime, dateFb);
-                                Log.e("HomeFragment", "dates"+currentTime+" "+dateFb+" "+diff);
+                                Log.e("HomeFragment", "dates" + currentTime + " " + dateFb + " " + diff);
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
                             assert type != null;
-                            if(diff<=1 && diff>=0 && type.equalsIgnoreCase("AC")) {
+                            if (diff <= 1 && diff >= 0 && type.equalsIgnoreCase("AC")) {
 
                                 String lat = grandChild.child("Latitude").getValue(String.class);
                                 String lon = grandChild.child("Longitude").getValue(String.class);

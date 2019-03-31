@@ -141,9 +141,9 @@ public class MainActivity extends AppCompatActivity {
 
         Toast.makeText(this, "Marks on Map show presence of power supply.",
                 Toast.LENGTH_SHORT).show();
-        
+
         SharedPreferences prefs = getSharedPreferences("AllowMoniSharedPref", MODE_PRIVATE);
-        if(prefs.getBoolean("allow",true)) {
+        if (prefs.getBoolean("allow", true)) {
             Constraints constraints = new Constraints.Builder()
                     .setRequiresBatteryNotLow(true)
                     .build();
@@ -162,8 +162,7 @@ public class MainActivity extends AppCompatActivity {
         */
             WorkManager.getInstance().enqueue(saveRequest);
 
-        }
-        else {
+        } else {
             Toast.makeText(this, "Please Allow Monitoring to help the community",
                     Toast.LENGTH_SHORT).show();
             Log.e("workM", "Allow Monitoring: no");

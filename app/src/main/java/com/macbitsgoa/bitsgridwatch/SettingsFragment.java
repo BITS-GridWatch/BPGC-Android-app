@@ -37,7 +37,7 @@ public class SettingsFragment extends Fragment {
         usernameTextView = view.findViewById(R.id.textview_username_settings);
         Button signOutButton = view.findViewById(R.id.button_signout_settings);
         Button signInButton = view.findViewById(R.id.button_signin_settings);
-        Switch allowSwitch= view.findViewById(R.id.switch_monitor_settings);
+        Switch allowSwitch = view.findViewById(R.id.switch_monitor_settings);
         editor = getContext().getSharedPreferences("AllowMoniSharedPref", MODE_PRIVATE).edit();
 
         signInButton.setOnClickListener(new View.OnClickListener() {
@@ -58,10 +58,9 @@ public class SettingsFragment extends Fragment {
             }
         });
         boolean switchState = allowSwitch.isChecked();
-        if(switchState){
-            editor.putBoolean("allow",true);
-        }
-        else {
+        if (switchState) {
+            editor.putBoolean("allow", true);
+        } else {
             editor.putBoolean("allow", false);
         }
         return view;

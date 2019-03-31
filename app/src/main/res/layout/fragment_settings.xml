@@ -1,43 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/username"
+            android:layout_margin="20dp"
             android:layout_weight="1"
-            android:layout_margin="20dp"/>
+            android:text="@string/username" />
+
         <TextView
+            android:id="@+id/textview_username_settings"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/textview_username_settings"
-            android:layout_weight="1"
-            android:layout_margin="20dp"/>
+            android:layout_margin="20dp"
+            android:layout_weight="1" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/monitor"
+            android:layout_margin="20dp"
             android:layout_weight="1"
-            android:layout_margin="20dp"/>
+            android:text="@string/monitor" />
+
         <Switch
+            android:id="@+id/switch_monitor_settings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/switch_monitor_settings"
-            android:layout_weight="1"
             android:layout_margin="20dp"
-            android:checked="true"/>
+            android:layout_weight="1"
+            android:checked="true" />
 
 
     </LinearLayout>
@@ -45,27 +50,28 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
         android:gravity="center_horizontal"
-        android:layout_marginTop="20dp">
+        android:orientation="horizontal">
+
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/button_signin_settings"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/signin"
-            android:layout_marginEnd="10dp"/>
-        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/button_signout_settings"
             android:layout_gravity="center_horizontal"
-            android:text="@string/signout"
-            android:layout_marginStart="10dp"/>
+            android:layout_marginEnd="10dp"
+            android:text="@string/signin" />
+
+        <Button
+            android:id="@+id/button_signout_settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="10dp"
+            android:text="@string/signout" />
 
 
     </LinearLayout>
-
 
 
 </LinearLayout>
