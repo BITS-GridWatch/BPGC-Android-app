@@ -2,10 +2,10 @@ package com.macbitsgoa.bitsgridwatch;
 
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentFilter;
 
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,22 +20,25 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.work.Constraints;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
     private BottomNavigationView bottomNav;
-    private FrameLayout frameLayout;
     private Fragment selectedFragment = null;
 
     private GoogleSignInClient googleSignInClient;
@@ -102,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
             signedInStatus = false;
 
         bottomNav = findViewById(R.id.bottomnav_activity_main);
-        frameLayout = findViewById(R.id.framelayout_activity_main);
+        FrameLayout frameLayout = findViewById(R.id.framelayout_activity_main);
 
         bottomNav.setSelectedItemId(R.id.item_bottomnav_home);  //Set Home as default selected.
         bottomNav.setOnNavigationItemSelectedListener(item -> {
@@ -125,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //activating the PowerConnectionReceiver
+/*
 
         IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         Intent batteryStatus = registerReceiver(null, ifilter);
@@ -133,8 +137,36 @@ public class MainActivity extends AppCompatActivity {
         powerConnectionReceiver.onReceive(getApplicationContext(), batteryStatus);
 
         registerReceiver(powerConnectionReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+*/
 
+        Toast.makeText(this, "Marks on Map show presence of power supply.",
+                Toast.LENGTH_SHORT).show();
 
+        SharedPreferences prefs = getSharedPreferences("AllowMoniSharedPref", MODE_PRIVATE);
+        if (prefs.getBoolean("allow", true)) {
+            Constraints constraints = new Constraints.Builder()
+                    .setRequiresBatteryNotLow(true)
+                    .build();
+
+            PeriodicWorkRequest saveRequest =
+                    new PeriodicWorkRequest.Builder(UploadPowerDataWorker.class, 15,
+                            TimeUnit.MINUTES)
+                            .setConstraints(constraints)
+                            .build();
+
+            //worker
+            Log.e("workM", "worker started");
+
+        /*OneTimeWorkRequest saveRequest = new OneTimeWorkRequest.Builder(UploadPowerDataWorker.class)
+                .build();
+        */
+            WorkManager.getInstance().enqueue(saveRequest);
+
+        } else {
+            Toast.makeText(this, "Please Allow Monitoring to help the community",
+                    Toast.LENGTH_SHORT).show();
+            Log.e("workM", "Allow Monitoring: no");
+        }
     }
 
     @Override
@@ -170,7 +202,8 @@ public class MainActivity extends AppCompatActivity {
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             userAccount = completedTask.getResult(ApiException.class);
-            Toast.makeText(MainActivity.this, "Signed In as " + userAccount.getDisplayName().toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "Signed In as " + userAccount.getDisplayName()
+                    .toString(), Toast.LENGTH_LONG).show();
             // Signed in successfully, show authenticated UI.
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
@@ -196,7 +229,8 @@ public class MainActivity extends AppCompatActivity {
         googleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                Toast.makeText(MainActivity.this, "Successfully Signed Out!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Successfully Signed Out!",
+                        Toast.LENGTH_SHORT).show();
             }
         });
         setSignedInStatus(false);

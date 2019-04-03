@@ -8,6 +8,39 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:373964646119:android:0f1a6a0252136daf",
+        "android_client_info": {
+          "package_name": "com.example.feb15"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "373964646119-k5hi61evl32h9j5en6njke14u4iq7akf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.feb15",
+            "certificate_hash": "250d9cd8a06c99d09ffa9654f7668e58cab63c96"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5apTy4Azlqkwfvh5ykhysF5tXw9L7EbE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "373964646119-iasuiaj9r2tigh2rnlap3ucfao7v8idc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:373964646119:android:53dfcd4f9b1b5777",
         "android_client_info": {
           "package_name": "com.example.shaunakbhanarkar.chargingstate"
@@ -21,10 +54,6 @@
             "package_name": "com.example.shaunakbhanarkar.chargingstate",
             "certificate_hash": "250d9cd8a06c99d09ffa9654f7668e58cab63c96"
           }
-        },
-        {
-          "client_id": "373964646119-a2ae1cqo9rd6uftk70jv0e13jkec9s8d.apps.googleusercontent.com",
-          "client_type": 3
         }
       ],
       "api_key": [
@@ -33,20 +62,13 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "373964646119-iasuiaj9r2tigh2rnlap3ucfao7v8idc.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     },
@@ -65,18 +87,6 @@
             "package_name": "com.macbitsgoa.bitsgridwatch",
             "certificate_hash": "691c9e26f5d642b23fe6899c9a699cd2645fd639"
           }
-        },
-        {
-          "client_id": "373964646119-tsfr9726qls3r5ti2611hfed5c115kai.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.macbitsgoa.bitsgridwatch",
-            "certificate_hash": "53c9f14106a9e051c9b6df42984524eaa8bd5acc"
-          }
-        },
-        {
-          "client_id": "373964646119-a2ae1cqo9rd6uftk70jv0e13jkec9s8d.apps.googleusercontent.com",
-          "client_type": 3
         }
       ],
       "api_key": [
@@ -85,20 +95,13 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "373964646119-iasuiaj9r2tigh2rnlap3ucfao7v8idc.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     },
@@ -133,10 +136,6 @@
             "package_name": "com.macbitsgoa.bitsgridwatch.debug",
             "certificate_hash": "53c9f14106a9e051c9b6df42984524eaa8bd5acc"
           }
-        },
-        {
-          "client_id": "373964646119-a2ae1cqo9rd6uftk70jv0e13jkec9s8d.apps.googleusercontent.com",
-          "client_type": 3
         }
       ],
       "api_key": [
@@ -145,20 +144,13 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "373964646119-iasuiaj9r2tigh2rnlap3ucfao7v8idc.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }

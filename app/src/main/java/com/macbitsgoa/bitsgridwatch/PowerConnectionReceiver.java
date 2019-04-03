@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
@@ -84,20 +85,13 @@ public class PowerConnectionReceiver extends BroadcastReceiver implements Locati
                     }
                 });
 
-        /*loc = locationManager.getLastKnownLocation(bestProvider);
-        if (loc != null) {
 
-            latitude = String.valueOf(loc.getLatitude());
-            longitude = String.valueOf(loc.getLongitude());
-        }
-        else {
-            locationManager.requestLocationUpdates(bestProvider, 1000, 0, this);
-        }*/
-
-        //get charging state
+        //get charging state 1
 
         int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
-        boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL;
+
+        boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
+                status == BatteryManager.BATTERY_STATUS_FULL;
 
 
         //get user id
@@ -110,9 +104,7 @@ public class PowerConnectionReceiver extends BroadcastReceiver implements Locati
             uid = googleSignInAccount.getId();
         }
 
-
         //set firebase database variables
-
         String key = myRef.push().getKey();
 
         final DatabaseReference chargingstate = myRef.child("Status").child(uid).child(key).child("ChargingState");
