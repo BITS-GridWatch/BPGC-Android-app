@@ -157,7 +157,6 @@ public class HomeFragment extends Fragment {
                 googleMap.clear();
                 mapData(googleMap);
 
-
             }
         });
     }

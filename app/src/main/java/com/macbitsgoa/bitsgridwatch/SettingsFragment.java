@@ -24,7 +24,8 @@ import static android.content.Context.MODE_PRIVATE;
 public class SettingsFragment extends Fragment {
 
     private TextView usernameTextView;
-    SharedPreferences.Editor editor;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
     @Nullable
     @Override
@@ -38,7 +39,8 @@ public class SettingsFragment extends Fragment {
         Button signOutButton = view.findViewById(R.id.button_signout_settings);
         Button signInButton = view.findViewById(R.id.button_signin_settings);
         Switch allowSwitch = view.findViewById(R.id.switch_monitor_settings);
-        editor = getContext().getSharedPreferences("AllowMoniSharedPref", MODE_PRIVATE).edit();
+        sharedPreferences = getContext().getSharedPreferences("AllowMoniSharedPref", MODE_PRIVATE);
+        editor = sharedPreferences.edit();
 
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,12 +59,24 @@ public class SettingsFragment extends Fragment {
                 usernameTextView.setText(R.string.guest);
             }
         });
-        boolean switchState = allowSwitch.isChecked();
-        if (switchState) {
-            editor.putBoolean("allow", true);
-        } else {
-            editor.putBoolean("allow", false);
-        }
+
+        allowSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean switchState = allowSwitch.isChecked();
+                //editor.clear();
+                editor.putBoolean("allow", switchState);
+                editor.commit();
+                if(switchState){
+                    ((MainActivity) getActivity()).startBackgroundWork();
+                } else {
+                    ((MainActivity) getActivity()).cancelBackgroundWork();
+                }
+            }
+        });
+
+        boolean switchState = sharedPreferences.getBoolean("allow",false);
+        allowSwitch.setChecked(switchState);
         return view;
     }
 

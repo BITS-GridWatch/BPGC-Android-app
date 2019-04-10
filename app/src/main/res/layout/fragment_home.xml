@@ -22,31 +22,76 @@
             android:layout_gravity="bottom|end"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
+            app:fab_addButtonColorNormal="#000000"
+            app:fab_addButtonPlusIconColor="#ffffff"
             app:layout_anchorGravity="bottom|right|end"
-            fab:fab_addButtonColorNormal="@color/white"
             fab:fab_addButtonColorPressed="@color/white_pressed"
             fab:fab_addButtonPlusIconColor="@color/half_black"
             fab:fab_labelStyle="@style/menu_labels_style">
 
-            <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/action_a"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:src="@drawable/timer_five"
-                fab:fab_colorNormal="@color/white"
-                fab:fab_colorPressed="@color/white_pressed"
-                fab:fab_title="5 mins" />
+                android:orientation="horizontal"
+                android:gravity="end"
+                android:foregroundGravity="right">
 
-            <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/action_b"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Last 5 Mins data"
+                    android:layout_margin="5dp"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/white"
+                    android:background="@drawable/fab_tv_back"
+                    android:padding="10dp" />
+
+                <com.getbase.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/action_a"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    app:fab_colorNormal="@color/white"
+                    app:fab_colorPressed="@color/white"
+                    android:src="@drawable/timer_five"
+                    fab:fab_colorNormal="@color/white"
+                    fab:fab_colorPressed="@color/white_pressed"
+                    fab:fab_title="5 mins"
+                    android:layout_gravity="end"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:src="@drawable/one_hour_icon"
-                fab:fab_colorNormal="@color/white"
-                fab:fab_colorPressed="@color/white_pressed"
-                fab:fab_title="1 hour" />
+                android:orientation="horizontal"
+                android:gravity="end"
+                android:foregroundGravity="right">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Last 1 Hour data"
+                    android:layout_margin="5dp"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/white"
+                    android:background="@drawable/fab_tv_back"
+                    android:padding="10dp"/>
+
+                <com.getbase.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/action_b"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    app:fab_colorNormal="@color/white"
+                    app:fab_colorPressed="@color/white"
+                    android:src="@drawable/one_hour_icon"
+                    fab:fab_colorNormal="@color/white"
+                    fab:fab_colorPressed="@color/white_pressed"
+                    fab:fab_title="1 hour"
+                    android:layout_gravity="end"/>
+            </LinearLayout>
+
 
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
