@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private GoogleSignInAccount userAccount;
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 434;
 
+    private static PeriodicWorkRequest saveRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,30 +139,22 @@ public class MainActivity extends AppCompatActivity {
 
         registerReceiver(powerConnectionReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 */
+        //Initialize WorkManager variables:
+        Constraints constraints = new Constraints.Builder()
+                .setRequiresBatteryNotLow(true)
+                .build();
+
+        saveRequest = new PeriodicWorkRequest.Builder(UploadPowerDataWorker.class, 15,
+                        TimeUnit.MINUTES)
+                        .setConstraints(constraints)
+                        .build();
 
         Toast.makeText(this, "Marks on Map show presence of power supply.",
                 Toast.LENGTH_SHORT).show();
 
         SharedPreferences prefs = getSharedPreferences("AllowMoniSharedPref", MODE_PRIVATE);
         if (prefs.getBoolean("allow", true)) {
-            Constraints constraints = new Constraints.Builder()
-                    .setRequiresBatteryNotLow(true)
-                    .build();
-
-            PeriodicWorkRequest saveRequest =
-                    new PeriodicWorkRequest.Builder(UploadPowerDataWorker.class, 15,
-                            TimeUnit.MINUTES)
-                            .setConstraints(constraints)
-                            .build();
-
-            //worker
-            Log.e("workM", "worker started");
-
-        /*OneTimeWorkRequest saveRequest = new OneTimeWorkRequest.Builder(UploadPowerDataWorker.class)
-                .build();
-        */
-            WorkManager.getInstance().enqueue(saveRequest);
-
+            startBackgroundWork();
         } else {
             Toast.makeText(this, "Please Allow Monitoring to help the community",
                     Toast.LENGTH_SHORT).show();
@@ -208,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
+            Log.w(TAG, "signInResult:failed code = " + e.getStatusCode());
             userAccount = null;
         }
     }
@@ -226,13 +219,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void userSignOut() {
-        googleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Toast.makeText(MainActivity.this, "Successfully Signed Out!",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
+        if(signedInStatus) {
+            googleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    Toast.makeText(MainActivity.this, "Successfully Signed Out!",
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            Toast.makeText(getApplicationContext(), "Sign-Out not possible without a Sign-In", Toast.LENGTH_SHORT).show();
+        }
         setSignedInStatus(false);
         userAccount = null;
     }
@@ -245,12 +242,12 @@ public class MainActivity extends AppCompatActivity {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.e("MainActivity", "Permission granted");
+                    Log.d(TAG, "Location Permission granted");
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
 
                 } else {
-                    Log.e("HomeFragment", "Permission denied");
+                    Log.e(TAG, "Location Permission denied");
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }
@@ -261,5 +258,20 @@ public class MainActivity extends AppCompatActivity {
             // other 'case' lines to check for other
             // permissions this app might request.
         }
+    }
+
+    public void startBackgroundWork() {
+        //worker
+        Log.e("workM", "worker started");
+
+        /*OneTimeWorkRequest saveRequest = new OneTimeWorkRequest.Builder(UploadPowerDataWorker.class)
+                .build();
+        */
+        WorkManager.getInstance().enqueue(saveRequest);
+    }
+
+    public void cancelBackgroundWork() {
+            WorkManager.getInstance().cancelWorkById(saveRequest.getId());
+            Log.d("workM", "Background Work cancelled");
     }
 }
