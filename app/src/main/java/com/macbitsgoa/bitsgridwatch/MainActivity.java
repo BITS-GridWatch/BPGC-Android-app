@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     private GoogleSignInClient googleSignInClient;
     private static final int RC_SIGN_IN = 9001;
-    private Boolean signedInStatus;
+    private Boolean signedInStatus = false;
     private GoogleSignInAccount userAccount;
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 434;
 
@@ -145,9 +145,9 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         saveRequest = new PeriodicWorkRequest.Builder(UploadPowerDataWorker.class, 15,
-                        TimeUnit.MINUTES)
-                        .setConstraints(constraints)
-                        .build();
+                TimeUnit.MINUTES)
+                .setConstraints(constraints)
+                .build();
 
         Toast.makeText(this, "Marks on Map show presence of power supply.",
                 Toast.LENGTH_SHORT).show();
@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void userSignOut() {
-        if(signedInStatus) {
+        if (signedInStatus) {
             googleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
@@ -271,7 +271,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void cancelBackgroundWork() {
-            WorkManager.getInstance().cancelWorkById(saveRequest.getId());
-            Log.d("workM", "Background Work cancelled");
+        WorkManager.getInstance().cancelWorkById(saveRequest.getId());
+        Log.d("workM", "Background Work cancelled");
     }
 }

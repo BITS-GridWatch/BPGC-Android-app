@@ -16,5 +16,7 @@
 
     <string name="map_api">AIzaSyBX-c0oVJZDt8gwtoqGppDS7PABK9BU1zQ</string>
     <string name="web_client_id">373964646119-iasuiaj9r2tigh2rnlap3ucfao7v8idc.apps.googleusercontent.com</string>
+    <string name="last_5_mins_text">Last 5 Mins data</string>
+    <string name="last_1_hour_text">Last 1 Hour data</string>
 
 </resources>

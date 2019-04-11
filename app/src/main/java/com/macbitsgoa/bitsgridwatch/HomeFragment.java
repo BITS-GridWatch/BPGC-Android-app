@@ -44,7 +44,7 @@ public class HomeFragment extends Fragment {
     private DatabaseReference database;
     private final LatLng centre = new LatLng(15.389557, 73.876974);
     private Date currentTime = Calendar.getInstance().getTime();
-    private FloatingActionButton fabA,fabB;
+    private FloatingActionButton fabA, fabB;
     private FloatingActionsMenu floatingActionsMenu;
     private int thresholdTime;
 
@@ -61,9 +61,9 @@ public class HomeFragment extends Fragment {
         mMapView = view.findViewById(R.id.mapView);
         fabA = view.findViewById(R.id.action_a);
         fabB = view.findViewById(R.id.action_b);
-        floatingActionsMenu =view.findViewById(R.id.fab_switch);
+        floatingActionsMenu = view.findViewById(R.id.fab_switch);
         mMapView.onCreate(savedInstanceState);
-        thresholdTime=60;
+        thresholdTime = 60;
         mMapView.onResume(); // needed to get the map to display immediately
 
         try {
@@ -140,8 +140,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                Log.e("HomeFragment","fab5"+ thresholdTime);
-                thresholdTime=5;
+                Log.e("HomeFragment", "fab5" + thresholdTime);
+                thresholdTime = 5;
                 googleMap.clear();
                 mapData(googleMap);
 
@@ -152,8 +152,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                Log.e("HomeFragment","fab60"+ thresholdTime);
-                thresholdTime=60;
+                Log.e("HomeFragment", "fab60" + thresholdTime);
+                thresholdTime = 60;
                 googleMap.clear();
                 mapData(googleMap);
 
@@ -182,6 +182,9 @@ public class HomeFragment extends Fragment {
                         int diffMins = 0;
                         int diffHours = 0;
                         int diffDays = 0;
+                        if (time == null) {
+                            continue;
+                        }
                         try {
                             Date dateFb = new SimpleDateFormat("E MMM dd HH:mm:ss z yyyy",
                                     Locale.ENGLISH).parse(time);
@@ -193,26 +196,26 @@ public class HomeFragment extends Fragment {
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
-                        if (diffMins <= thresholdTime && diffMins >= 0 && diffDays==0
-                                && diffHours<=1){
+                        if (diffMins <= thresholdTime && diffMins >= 0 && diffDays == 0
+                                && diffHours <= 1) {
                             String type = grandChild.child("Type").getValue(String.class);
 
-                            if (type!=null && type.equalsIgnoreCase("AC")) {
+                            if (type != null && type.equalsIgnoreCase("AC")) {
                                 String lat = grandChild.child("Latitude").getValue(String.class);
                                 String lon = grandChild.child("Longitude").getValue(String.class);
                                 Boolean chargingState = grandChild.child("ChargingState")
                                         .getValue(Boolean.class);
 
                                 Log.e("HomeFragment", "record" + lat + " " + lon + " " + chargingState);
-                                if (chargingState != null && chargingState) {
+                                if (chargingState != null && chargingState && lat != null && lon != null) {
                                     // For dropping a marker at a point on the Map
                                     LatLng powerMarker = new LatLng(Double.parseDouble(lat),
                                             Double.parseDouble(lon));
-                                    assert time != null;
+
                                     googleMap.addMarker(new MarkerOptions().position(powerMarker)
                                             .title("Power supply detected")
                                             .snippet("at " + time.substring(0, 16) + ""));
-                                    Log.e("HomeFragment","fab? "+ thresholdTime +" diff "+diffMins+" "+time);
+                                    Log.e("HomeFragment", "fab? " + thresholdTime + " diff " + diffMins + " " + time);
                                     Log.e("HomeFragment", "marked" + lat + " " + lon + " " + chargingState);
                                 }
                             }
@@ -315,7 +318,7 @@ public class HomeFragment extends Fragment {
 
         long elapsedSeconds = different / secondsInMilli;
 
-        int[] diffs={(int)elapsedDays,(int)elapsedHours,(int)elapsedMinutes};
+        int[] diffs = {(int) elapsedDays, (int) elapsedHours, (int) elapsedMinutes};
         return diffs;
     }
 }

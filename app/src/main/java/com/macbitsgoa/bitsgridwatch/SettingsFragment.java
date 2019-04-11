@@ -15,6 +15,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Objects;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -67,15 +69,15 @@ public class SettingsFragment extends Fragment {
                 //editor.clear();
                 editor.putBoolean("allow", switchState);
                 editor.commit();
-                if(switchState){
-                    ((MainActivity) getActivity()).startBackgroundWork();
+                if (switchState) {
+                    ((MainActivity) Objects.requireNonNull(getActivity())).startBackgroundWork();
                 } else {
-                    ((MainActivity) getActivity()).cancelBackgroundWork();
+                    ((MainActivity) Objects.requireNonNull(getActivity())).cancelBackgroundWork();
                 }
             }
         });
 
-        boolean switchState = sharedPreferences.getBoolean("allow",false);
+        boolean switchState = sharedPreferences.getBoolean("allow", true);
         allowSwitch.setChecked(switchState);
         return view;
     }
