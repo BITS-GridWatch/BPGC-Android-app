@@ -1,8 +1,16 @@
 package com.macbitsgoa.bitsgridwatch;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.BatteryManager;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +19,12 @@ import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -18,7 +32,11 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,8 +51,11 @@ import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class HomeFragment extends Fragment {
 
@@ -44,9 +65,13 @@ public class HomeFragment extends Fragment {
     private DatabaseReference database;
     private final LatLng centre = new LatLng(15.389557, 73.876974);
     private Date currentTime = Calendar.getInstance().getTime();
-    private FloatingActionButton fabA,fabB;
+    private FloatingActionButton fabA, fabB;
     private FloatingActionsMenu floatingActionsMenu;
     private int thresholdTime;
+
+
+    //shared preferences for theme
+    private SharedPreferences theme_shared_preferences;
 
     @Nullable
     @Override
@@ -61,9 +86,9 @@ public class HomeFragment extends Fragment {
         mMapView = view.findViewById(R.id.mapView);
         fabA = view.findViewById(R.id.action_a);
         fabB = view.findViewById(R.id.action_b);
-        floatingActionsMenu =view.findViewById(R.id.fab_switch);
+        floatingActionsMenu = view.findViewById(R.id.fab_switch);
         mMapView.onCreate(savedInstanceState);
-        thresholdTime=60;
+        thresholdTime = 60;
         mMapView.onResume(); // needed to get the map to display immediately
 
         try {
@@ -76,6 +101,21 @@ public class HomeFragment extends Fragment {
             @Override
             public void onMapReady(GoogleMap mMap) {
                 googleMap = mMap;
+
+
+                //set theme
+                PowerManager powerManager = (PowerManager) getActivity().getSystemService(Context.POWER_SERVICE);
+
+                theme_shared_preferences  = getActivity().getSharedPreferences("ThemeOptions",MODE_PRIVATE);
+                int theme = theme_shared_preferences.getInt("Theme",0);
+
+                if (theme == AppCompatDelegate.MODE_NIGHT_YES || (theme == AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY && powerManager.isPowerSaveMode()) )
+                {
+                    googleMap.setMapStyle(new MapStyleOptions(getResources()
+                            .getString(R.string.map_style_json)));
+
+                }
+
 
                 // For showing a move to my location button
                 if (getContext().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -108,8 +148,56 @@ public class HomeFragment extends Fragment {
                     return;
                 } else {
                     // Permission has already been granted
+
+
+
+
                     googleMap.setMyLocationEnabled(true);
                 }
+
+
+
+                /*check if location is enabled or not*/
+
+                LocationRequest locationRequest = LocationRequest.create();
+                locationRequest.setInterval(10000);
+                locationRequest.setFastestInterval(5000);
+                locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+                LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                        .addLocationRequest(locationRequest);
+
+                SettingsClient client = LocationServices.getSettingsClient(getActivity());
+                Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
+
+                task.addOnSuccessListener(getActivity(), new OnSuccessListener<LocationSettingsResponse>() {
+                    @Override
+                    public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                        // All location settings are satisfied. The client can initialize
+                        // location requests here.
+                        // ...
+                    }
+                });
+
+                task.addOnFailureListener(getActivity(), new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        if (e instanceof ResolvableApiException) {
+                            // Location settings are not satisfied, but this can be fixed
+                            // by showing the user a dialog.
+                            try {
+                                // Show the dialog by calling startResolutionForResult(),
+                                // and check the result in onActivityResult().
+                                ResolvableApiException resolvable = (ResolvableApiException) e;
+                                resolvable.startResolutionForResult(getActivity(),
+                                        0);
+                            } catch (IntentSender.SendIntentException sendEx) {
+                                // Ignore the error.
+                            }
+                        }
+                    }
+                });
+
                 googleMap.setMyLocationEnabled(true);
 
                 mapData(googleMap);
@@ -140,8 +228,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                Log.e("HomeFragment","fab5"+ thresholdTime);
-                thresholdTime=5;
+                Log.e("HomeFragment", "fab5" + thresholdTime);
+                thresholdTime = 5;
                 googleMap.clear();
                 mapData(googleMap);
 
@@ -152,8 +240,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                Log.e("HomeFragment","fab60"+ thresholdTime);
-                thresholdTime=60;
+                Log.e("HomeFragment", "fab60" + thresholdTime);
+                thresholdTime = 60;
                 googleMap.clear();
                 mapData(googleMap);
 
@@ -182,6 +270,9 @@ public class HomeFragment extends Fragment {
                         int diffMins = 0;
                         int diffHours = 0;
                         int diffDays = 0;
+                        if (time == null) {
+                            continue;
+                        }
                         try {
                             Date dateFb = new SimpleDateFormat("E MMM dd HH:mm:ss z yyyy",
                                     Locale.ENGLISH).parse(time);
@@ -193,26 +284,26 @@ public class HomeFragment extends Fragment {
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
-                        if (diffMins <= thresholdTime && diffMins >= 0 && diffDays==0
-                                && diffHours<=1){
+                        if (diffMins <= thresholdTime && diffMins >= 0 && diffDays == 0
+                                && diffHours <= 1) {
                             String type = grandChild.child("Type").getValue(String.class);
 
-                            if (type!=null && type.equalsIgnoreCase("AC")) {
+                            if (type != null && type.equalsIgnoreCase("AC")) {
                                 String lat = grandChild.child("Latitude").getValue(String.class);
                                 String lon = grandChild.child("Longitude").getValue(String.class);
                                 Boolean chargingState = grandChild.child("ChargingState")
                                         .getValue(Boolean.class);
 
                                 Log.e("HomeFragment", "record" + lat + " " + lon + " " + chargingState);
-                                if (chargingState != null && chargingState) {
+                                if (chargingState != null && chargingState && lat != null && lon != null) {
                                     // For dropping a marker at a point on the Map
                                     LatLng powerMarker = new LatLng(Double.parseDouble(lat),
                                             Double.parseDouble(lon));
-                                    assert time != null;
+
                                     googleMap.addMarker(new MarkerOptions().position(powerMarker)
                                             .title("Power supply detected")
                                             .snippet("at " + time.substring(0, 16) + ""));
-                                    Log.e("HomeFragment","fab? "+ thresholdTime +" diff "+diffMins+" "+time);
+                                    Log.e("HomeFragment", "fab? " + thresholdTime + " diff " + diffMins + " " + time);
                                     Log.e("HomeFragment", "marked" + lat + " " + lon + " " + chargingState);
                                 }
                             }
@@ -315,7 +406,7 @@ public class HomeFragment extends Fragment {
 
         long elapsedSeconds = different / secondsInMilli;
 
-        int[] diffs={(int)elapsedDays,(int)elapsedHours,(int)elapsedMinutes};
+        int[] diffs = {(int) elapsedDays, (int) elapsedHours, (int) elapsedMinutes};
         return diffs;
     }
 }

@@ -47,6 +47,14 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/theme_select"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Theme"
+        android:padding="20dp"
+        />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

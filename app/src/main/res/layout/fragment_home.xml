@@ -32,64 +32,64 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:foregroundGravity="right"
                 android:gravity="end"
-                android:foregroundGravity="right">
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Last 5 Mins data"
-                    android:layout_margin="5dp"
                     android:layout_gravity="center_vertical"
-                    android:textColor="@color/white"
+                    android:layout_margin="5dp"
                     android:background="@drawable/fab_tv_back"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:text="@string/last_5_mins_text"
+                    android:textColor="@color/white" />
 
                 <com.getbase.floatingactionbutton.FloatingActionButton
                     android:id="@+id/action_a"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="end"
                     android:background="@color/white"
+                    android:src="@drawable/timer_five"
                     app:fab_colorNormal="@color/white"
                     app:fab_colorPressed="@color/white"
-                    android:src="@drawable/timer_five"
                     fab:fab_colorNormal="@color/white"
                     fab:fab_colorPressed="@color/white_pressed"
-                    fab:fab_title="5 mins"
-                    android:layout_gravity="end"/>
+                    fab:fab_title="5 mins" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:foregroundGravity="right"
                 android:gravity="end"
-                android:foregroundGravity="right">
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Last 1 Hour data"
-                    android:layout_margin="5dp"
                     android:layout_gravity="center_vertical"
-                    android:textColor="@color/white"
+                    android:layout_margin="5dp"
                     android:background="@drawable/fab_tv_back"
-                    android:padding="10dp"/>
+                    android:padding="10dp"
+                    android:text="@string/last_1_hour_text"
+                    android:textColor="@color/white" />
 
                 <com.getbase.floatingactionbutton.FloatingActionButton
                     android:id="@+id/action_b"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="end"
                     android:background="@color/white"
+                    android:src="@drawable/one_hour_icon"
                     app:fab_colorNormal="@color/white"
                     app:fab_colorPressed="@color/white"
-                    android:src="@drawable/one_hour_icon"
                     fab:fab_colorNormal="@color/white"
                     fab:fab_colorPressed="@color/white_pressed"
-                    fab:fab_title="1 hour"
-                    android:layout_gravity="end"/>
+                    fab:fab_title="1 hour" />
             </LinearLayout>
 
 

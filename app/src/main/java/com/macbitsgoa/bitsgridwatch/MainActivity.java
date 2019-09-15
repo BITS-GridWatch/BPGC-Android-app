@@ -5,8 +5,10 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.IntentFilter;
 
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.FrameLayout;
@@ -17,7 +19,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -26,6 +36,7 @@ import java.util.concurrent.TimeUnit;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -43,16 +54,27 @@ public class MainActivity extends AppCompatActivity {
 
     private GoogleSignInClient googleSignInClient;
     private static final int RC_SIGN_IN = 9001;
-    private Boolean signedInStatus;
+    private Boolean signedInStatus = false;
     private GoogleSignInAccount userAccount;
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 434;
 
     private static PeriodicWorkRequest saveRequest;
 
+    //shared preferences for theme
+    private SharedPreferences theme_shared_preferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        //set theme
+        theme_shared_preferences  = this.getSharedPreferences("ThemeOptions",MODE_PRIVATE);
+        int theme = theme_shared_preferences.getInt("Theme",0);
+
+        AppCompatDelegate.setDefaultNightMode(theme);
+
 
         if (this.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED
@@ -88,6 +110,8 @@ public class MainActivity extends AppCompatActivity {
 
             //   googleMap.setMyLocationEnabled(true);
         }
+
+
 
         // [START config_signin]
         // Configure Google Sign In
@@ -145,9 +169,9 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         saveRequest = new PeriodicWorkRequest.Builder(UploadPowerDataWorker.class, 15,
-                        TimeUnit.MINUTES)
-                        .setConstraints(constraints)
-                        .build();
+                TimeUnit.MINUTES)
+                .setConstraints(constraints)
+                .build();
 
         Toast.makeText(this, "Marks on Map show presence of power supply.",
                 Toast.LENGTH_SHORT).show();
@@ -219,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void userSignOut() {
-        if(signedInStatus) {
+        if (signedInStatus) {
             googleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
@@ -271,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void cancelBackgroundWork() {
-            WorkManager.getInstance().cancelWorkById(saveRequest.getId());
-            Log.d("workM", "Background Work cancelled");
+        WorkManager.getInstance().cancelWorkById(saveRequest.getId());
+        Log.d("workM", "Background Work cancelled");
     }
 }
