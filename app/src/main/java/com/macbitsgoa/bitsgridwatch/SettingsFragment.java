@@ -1,5 +1,7 @@
 package com.macbitsgoa.bitsgridwatch;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +14,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -19,6 +23,7 @@ import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -28,6 +33,10 @@ public class SettingsFragment extends Fragment {
     private TextView usernameTextView;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
+
+    //shared preferences for theme
+    private SharedPreferences theme_shared_preferences;
+    private  SharedPreferences.Editor theme_editor;
 
     @Nullable
     @Override
@@ -43,6 +52,10 @@ public class SettingsFragment extends Fragment {
         Switch allowSwitch = view.findViewById(R.id.switch_monitor_settings);
         sharedPreferences = getContext().getSharedPreferences("AllowMoniSharedPref", MODE_PRIVATE);
         editor = sharedPreferences.edit();
+
+        //shared preferences for theme
+        theme_shared_preferences  = getActivity().getSharedPreferences("ThemeOptions",MODE_PRIVATE);
+        theme_editor = theme_shared_preferences.edit();
 
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,6 +92,62 @@ public class SettingsFragment extends Fragment {
 
         boolean switchState = sharedPreferences.getBoolean("allow", true);
         allowSwitch.setChecked(switchState);
+
+
+        //theme option
+
+        TextView theme_select = view.findViewById(R.id.theme_select);
+
+        CharSequence[] app_themes = {"Light","Dark","Set by Batter Saver"};
+
+        theme_select.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                AlertDialog alertDialog = null;
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Select App Theme");
+                builder.setSingleChoiceItems(app_themes, theme_shared_preferences.getInt("Theme",0) - 1, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int item) {
+
+                        switch(item)
+                        {
+                            case 0:
+
+//                                Toast.makeText(getContext(), "Light Theme Selected", Toast.LENGTH_LONG).show();
+                                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                                theme_editor.putInt("Theme",AppCompatDelegate.MODE_NIGHT_NO);
+                                theme_editor.commit();
+                                break;
+                            case 1:
+
+//                                Toast.makeText(getContext(), "Dark Theme Selected", Toast.LENGTH_LONG).show();
+                                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                                theme_editor.putInt("Theme",AppCompatDelegate.MODE_NIGHT_YES);
+                                theme_editor.commit();
+                                break;
+                            case 2:
+
+//                                Toast.makeText(getContext(), "Theme Set by Battery Saver Selected", Toast.LENGTH_LONG).show();
+                                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
+                                theme_editor.putInt("Theme",AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
+                                theme_editor.commit();
+                                break;
+                        }
+                        dialog.dismiss();
+                    }
+                });
+                alertDialog = builder.create();
+                alertDialog.show();
+
+
+            }
+        });
+
+
+
         return view;
     }
 

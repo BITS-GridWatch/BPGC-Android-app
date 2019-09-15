@@ -2,9 +2,15 @@ package com.macbitsgoa.bitsgridwatch;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.BatteryManager;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +32,7 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -44,8 +51,11 @@ import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class HomeFragment extends Fragment {
 
@@ -58,6 +68,10 @@ public class HomeFragment extends Fragment {
     private FloatingActionButton fabA, fabB;
     private FloatingActionsMenu floatingActionsMenu;
     private int thresholdTime;
+
+
+    //shared preferences for theme
+    private SharedPreferences theme_shared_preferences;
 
     @Nullable
     @Override
@@ -87,6 +101,21 @@ public class HomeFragment extends Fragment {
             @Override
             public void onMapReady(GoogleMap mMap) {
                 googleMap = mMap;
+
+
+                //set theme
+                PowerManager powerManager = (PowerManager) getActivity().getSystemService(Context.POWER_SERVICE);
+
+                theme_shared_preferences  = getActivity().getSharedPreferences("ThemeOptions",MODE_PRIVATE);
+                int theme = theme_shared_preferences.getInt("Theme",0);
+
+                if (theme == AppCompatDelegate.MODE_NIGHT_YES || (theme == AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY && powerManager.isPowerSaveMode()) )
+                {
+                    googleMap.setMapStyle(new MapStyleOptions(getResources()
+                            .getString(R.string.map_style_json)));
+
+                }
+
 
                 // For showing a move to my location button
                 if (getContext().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -125,6 +154,7 @@ public class HomeFragment extends Fragment {
 
                     googleMap.setMyLocationEnabled(true);
                 }
+
 
 
                 /*check if location is enabled or not*/

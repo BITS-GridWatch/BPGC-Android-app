@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.FrameLayout;
@@ -35,6 +36,7 @@ import java.util.concurrent.TimeUnit;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -58,10 +60,21 @@ public class MainActivity extends AppCompatActivity {
 
     private static PeriodicWorkRequest saveRequest;
 
+    //shared preferences for theme
+    private SharedPreferences theme_shared_preferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        //set theme
+        theme_shared_preferences  = this.getSharedPreferences("ThemeOptions",MODE_PRIVATE);
+        int theme = theme_shared_preferences.getInt("Theme",0);
+
+        AppCompatDelegate.setDefaultNightMode(theme);
+
 
         if (this.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED
