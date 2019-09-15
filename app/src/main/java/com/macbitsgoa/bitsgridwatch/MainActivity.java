@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private GoogleSignInClient googleSignInClient;
     private static final int RC_SIGN_IN = 9001;
     private Boolean signedInStatus = false;
+    private Boolean allowMonitoring = false;
     private GoogleSignInAccount userAccount;
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 434;
 
@@ -282,6 +283,14 @@ public class MainActivity extends AppCompatActivity {
             // other 'case' lines to check for other
             // permissions this app might request.
         }
+    }
+
+    public Boolean getAllowMonitoring() {
+        return allowMonitoring;
+    }
+
+    public void setAllowMonitoring(Boolean allowMonitoring) {
+        this.allowMonitoring = allowMonitoring;
     }
 
     public void startBackgroundWork() {

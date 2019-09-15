@@ -111,8 +111,7 @@ public class HomeFragment extends Fragment {
 
                 if (theme == AppCompatDelegate.MODE_NIGHT_YES || (theme == AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY && powerManager.isPowerSaveMode()) )
                 {
-                    googleMap.setMapStyle(new MapStyleOptions(getResources()
-                            .getString(R.string.map_style_json)));
+                    googleMap.setMapStyle(new MapStyleOptions(getResources().getString(R.string.map_style_json)));
 
                 }
 
