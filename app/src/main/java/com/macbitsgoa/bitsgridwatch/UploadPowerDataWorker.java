@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -20,9 +22,11 @@ import com.google.android.gms.location.LocationServices;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.List;
+import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -140,6 +144,7 @@ public class UploadPowerDataWorker extends Worker implements LocationListener {
 
             // Got last known location. In some rare situations this can be null.
             if (location != null) {
+
                 latitude = String.valueOf(location.getLatitude());
                 longitude = String.valueOf(location.getLongitude());
                 Log.e("workM", "locations " + latitude + " " + longitude);
@@ -147,6 +152,9 @@ public class UploadPowerDataWorker extends Worker implements LocationListener {
                 // Logic to handle location object
 
                 if (latitude != null && longitude != null) {
+                    //GeoCoding
+                    String geoCode=getAddressFromLocation(Double.parseDouble(latitude),Double.parseDouble(longitude));
+
                     chargingState.setValue(isCharging);
                     latitudeFb.setValue(latitude);
                     longitudeFb.setValue(longitude);
@@ -192,5 +200,35 @@ public class UploadPowerDataWorker extends Worker implements LocationListener {
     @Override
     public void onProviderDisabled(String provider) {
 
+    }
+
+    private String getAddressFromLocation(double latitude, double longitude) {
+
+        Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.ENGLISH);
+        String geoCodeString="";
+
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+
+            if (addresses.size() > 0) {
+                Address fetchedAddress = addresses.get(0);
+                String postalCode=fetchedAddress.getPostalCode();
+                String locality=fetchedAddress.getLocality();
+
+                geoCodeString=locality;
+                Log.e("workM","Geo CODE"+geoCodeString);
+
+
+            } else {
+                geoCodeString="";
+                Log.e("workM","address<=0"+geoCodeString);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e("workM","catch: "+e.toString());
+            //printToast("Could not get address..!");
+        }
+        return geoCodeString;
     }
 }

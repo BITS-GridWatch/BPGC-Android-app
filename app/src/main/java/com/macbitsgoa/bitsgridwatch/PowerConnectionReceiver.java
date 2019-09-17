@@ -28,7 +28,7 @@ import java.util.Date;
 
 import androidx.core.app.ActivityCompat;
 
-
+// NOT BEING USED CURRENTLY
 public class PowerConnectionReceiver extends BroadcastReceiver implements LocationListener {
 
     //get firebase realtime database references
