@@ -3,12 +3,8 @@ package com.macbitsgoa.bitsgridwatch;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.IntentFilter;
-
-import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.os.BatteryManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.FrameLayout;
@@ -19,15 +15,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.ResolvableApiException;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -41,7 +29,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.work.Constraints;
-import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
@@ -49,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    private BottomNavigationView bottomNav;
     private Fragment selectedFragment = null;
 
     private GoogleSignInClient googleSignInClient;
@@ -61,9 +47,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static PeriodicWorkRequest saveRequest;
 
-    //shared preferences for theme
-    private SharedPreferences theme_shared_preferences;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,8 +54,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         //set theme
-        theme_shared_preferences  = this.getSharedPreferences("ThemeOptions",MODE_PRIVATE);
-        int theme = theme_shared_preferences.getInt("Theme",0);
+        //shared preferences for theme
+        SharedPreferences theme_shared_preferences = this.getSharedPreferences("ThemeOptions", MODE_PRIVATE);
+        int theme = theme_shared_preferences.getInt("Theme", 0);
 
         AppCompatDelegate.setDefaultNightMode(theme);
 
@@ -113,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-
         // [START config_signin]
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -125,12 +108,9 @@ public class MainActivity extends AppCompatActivity {
 
         //Initialize last signed in user
         userAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
-        if (userAccount != null)
-            signedInStatus = true;
-        else
-            signedInStatus = false;
+        signedInStatus = userAccount != null;
 
-        bottomNav = findViewById(R.id.bottomnav_activity_main);
+        BottomNavigationView bottomNav = findViewById(R.id.bottomnav_activity_main);
         FrameLayout frameLayout = findViewById(R.id.framelayout_activity_main);
 
         bottomNav.setSelectedItemId(R.id.item_bottomnav_home);  //Set Home as default selected.
@@ -220,8 +200,8 @@ public class MainActivity extends AppCompatActivity {
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             userAccount = completedTask.getResult(ApiException.class);
-            Toast.makeText(MainActivity.this, "Signed In as " + userAccount.getDisplayName()
-                    .toString(), Toast.LENGTH_LONG).show();
+            assert userAccount != null;
+            Toast.makeText(MainActivity.this, "Signed In as " + userAccount.getDisplayName(), Toast.LENGTH_LONG).show();
             // Signed in successfully, show authenticated UI.
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
@@ -262,27 +242,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.d(TAG, "Location Permission granted");
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
+        if (requestCode == MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION) {// If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG, "Location Permission granted");
+                // permission was granted, yay! Do the
+                // contacts-related task you need to do.
 
-                } else {
-                    Log.e(TAG, "Location Permission denied");
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-
+            } else {
+                Log.e(TAG, "Location Permission denied");
+                // permission denied, boo! Disable the
+                // functionality that depends on this permission.
             }
-            default:
-                break;
-            // other 'case' lines to check for other
-            // permissions this app might request.
-        }
+        }// other 'case' lines to check for other
+        // permissions this app might request.
     }
 
     public Boolean getAllowMonitoring() {
@@ -300,11 +273,11 @@ public class MainActivity extends AppCompatActivity {
         /*OneTimeWorkRequest saveRequest = new OneTimeWorkRequest.Builder(UploadPowerDataWorker.class)
                 .build();
         */
-        WorkManager.getInstance().enqueue(saveRequest);
+        WorkManager.getInstance(this).enqueue(saveRequest);
     }
 
     public void cancelBackgroundWork() {
-        WorkManager.getInstance().cancelWorkById(saveRequest.getId());
+        WorkManager.getInstance(this).cancelWorkById(saveRequest.getId());
         Log.d("workM", "Background Work cancelled");
     }
 }

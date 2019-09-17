@@ -120,6 +120,7 @@ public class UploadPowerDataWorker extends Worker implements LocationListener {
         DatabaseReference longitudeFb = myRef.child("Status").child(uid).child(key).child("Longitude");
         DatabaseReference timeFb = myRef.child("Status").child(uid).child(key).child("Time");
         DatabaseReference typeFb = myRef.child("Status").child(uid).child(key).child("Type");
+        DatabaseReference postalCodeFb = myRef.child("Status").child(uid).child(key).child("PostalCode");
 
 
         final DatabaseReference name = myRef.child("Users").child(uid).child("Name");
@@ -153,8 +154,9 @@ public class UploadPowerDataWorker extends Worker implements LocationListener {
 
                 if (latitude != null && longitude != null) {
                     //GeoCoding
-                    String geoCode=getAddressFromLocation(Double.parseDouble(latitude),Double.parseDouble(longitude));
+                    String geoCode = getAddressFromLocation(Double.parseDouble(latitude), Double.parseDouble(longitude));
 
+                    postalCodeFb.setValue(geoCode);
                     chargingState.setValue(isCharging);
                     latitudeFb.setValue(latitude);
                     longitudeFb.setValue(longitude);
@@ -163,7 +165,7 @@ public class UploadPowerDataWorker extends Worker implements LocationListener {
                         typeFb.setValue(type);
                     else
                         typeFb.setValue("");
-                    Log.e("workM", "sent to fb ");
+                    Log.e("workM", "sent to fb :"+geoCode);
 
                 } else {
                     Log.e("workM", "retry");
@@ -212,10 +214,10 @@ public class UploadPowerDataWorker extends Worker implements LocationListener {
 
             if (addresses.size() > 0) {
                 Address fetchedAddress = addresses.get(0);
-                String postalCode=fetchedAddress.getPostalCode();
-                String locality=fetchedAddress.getLocality();
+                //String postalCode=fetchedAddress.getPostalCode();
+                //String locality=fetchedAddress.getLocality();
 
-                geoCodeString=locality;
+                geoCodeString=fetchedAddress.getPostalCode();
                 Log.e("workM","Geo CODE"+geoCodeString);
 
 

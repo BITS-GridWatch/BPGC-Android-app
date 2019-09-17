@@ -1,16 +1,18 @@
 package com.macbitsgoa.bitsgridwatch;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.os.BatteryManager;
+import android.location.Address;
+import android.location.Criteria;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.telephony.mbms.StreamingServiceInfo;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +22,7 @@ import android.widget.Toast;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
@@ -43,11 +46,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -62,13 +68,12 @@ public class HomeFragment extends Fragment {
     private MapView mMapView;
     private GoogleMap googleMap;
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 434;
-    private DatabaseReference database;
-    private final LatLng centre = new LatLng(15.389557, 73.876974);
+    private DatabaseReference databaseStatus, databaseUsers;
+    private LatLng centre = new LatLng(15.389557, 73.876974);
     private Date currentTime = Calendar.getInstance().getTime();
     private FloatingActionButton fabA, fabB;
     private FloatingActionsMenu floatingActionsMenu;
     private int thresholdTime;
-
 
     //shared preferences for theme
     private SharedPreferences theme_shared_preferences;
@@ -82,7 +87,8 @@ public class HomeFragment extends Fragment {
         //Initialize layout elements here
         //-------------------------------
 
-        database = FirebaseDatabase.getInstance().getReference().child("Status");
+        databaseStatus = FirebaseDatabase.getInstance().getReference().child("Status");
+        databaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
         mMapView = view.findViewById(R.id.mapView);
         fabA = view.findViewById(R.id.action_a);
         fabB = view.findViewById(R.id.action_b);
@@ -92,7 +98,7 @@ public class HomeFragment extends Fragment {
         mMapView.onResume(); // needed to get the map to display immediately
 
         try {
-            MapsInitializer.initialize(getActivity().getApplicationContext());
+            MapsInitializer.initialize(Objects.requireNonNull(getActivity()).getApplicationContext());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -104,13 +110,12 @@ public class HomeFragment extends Fragment {
 
 
                 //set theme
-                PowerManager powerManager = (PowerManager) getActivity().getSystemService(Context.POWER_SERVICE);
+                PowerManager powerManager = (PowerManager) Objects.requireNonNull(getActivity()).getSystemService(Context.POWER_SERVICE);
 
-                theme_shared_preferences  = getActivity().getSharedPreferences("ThemeOptions",MODE_PRIVATE);
-                int theme = theme_shared_preferences.getInt("Theme",0);
+                theme_shared_preferences = getActivity().getSharedPreferences("ThemeOptions", MODE_PRIVATE);
+                int theme = theme_shared_preferences.getInt("Theme", 0);
 
-                if (theme == AppCompatDelegate.MODE_NIGHT_YES || (theme == AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY && powerManager.isPowerSaveMode()) )
-                {
+                if (theme == AppCompatDelegate.MODE_NIGHT_YES || (theme == AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY && powerManager.isPowerSaveMode())) {
                     googleMap.setMapStyle(new MapStyleOptions(getResources().getString(R.string.map_style_json)));
 
                 }
@@ -147,14 +152,8 @@ public class HomeFragment extends Fragment {
                     return;
                 } else {
                     // Permission has already been granted
-
-
-
-
                     googleMap.setMyLocationEnabled(true);
                 }
-
-
 
                 /*check if location is enabled or not*/
 
@@ -201,12 +200,6 @@ public class HomeFragment extends Fragment {
 
                 mapData(googleMap);
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centre, 0));
-
-
-                /*LatLng BITS = new LatLng(15.39, 73.88);
-                googleMap.addMarker(new MarkerOptions().position(BITS).title("BITS Pilani Goa")
-                        .snippet("Test Power Markings"));*/
-
                 // For zooming automatically to the location of the marker
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(centre)
                         .zoom(16f).tilt(10).build();
@@ -250,100 +243,153 @@ public class HomeFragment extends Fragment {
 
     private void mapData(GoogleMap googleMap) {
 
-        database.addListenerForSingleValueEvent(new ValueEventListener() {
+        LocationManager locationManager = (LocationManager) Objects.requireNonNull(getContext()).getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+
+        googleMap.setMyLocationEnabled(true);
+        if (getContext().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED && getContext().checkSelfPermission(
+                Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    Activity#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for Activity#requestPermissions for more details.
+            return;
+        }
+        assert locationManager != null;
+        Location location = locationManager.getLastKnownLocation(locationManager
+                .getBestProvider(criteria, false));
+        double locationLatitude = location.getLatitude();
+        double locationLongitude = location.getLongitude();
+        //current lat long found
+        Log.e("HomeFragment", "Lat " + locationLatitude + "Long " + locationLongitude);
+
+        //Geo coding current lat and long
+        String geoCode = getAddressFromLocation(locationLatitude, locationLongitude);
+
+        Log.e("HomeFragment", "PinCode " + geoCode);
+
+
+        //Camera zooms for the display map
+        centre = new LatLng(locationLatitude, locationLongitude);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centre, 0));
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(centre)
+                .zoom(16f).tilt(10).build();
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+
+        //getting the list of users(key) as needed to call the query in populateMap()
+        databaseUsers.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                Log.e("HomeFragment", "record");
                 for (DataSnapshot child :
                         dataSnapshot.getChildren()) {
-                    long lastChild = child.getChildrenCount();
-                    //int i = 0;
-                    Log.e("HomeFragment", "record" + child.getKey());
+                    String key = child.getKey();
 
-                    for (DataSnapshot grandChild : child.getChildren()) {
-
-                        Log.e("HomeFragment", "record" + grandChild.getKey());
-
-                        String time = grandChild.child("Time").getValue(String.class);
-                        int diffMins = 0;
-                        int diffHours = 0;
-                        int diffDays = 0;
-                        if (time == null) {
-                            continue;
-                        }
-                        try {
-                            Date dateFb = new SimpleDateFormat("E MMM dd HH:mm:ss z yyyy",
-                                    Locale.ENGLISH).parse(time);
-                            diffDays = printDifference(dateFb, currentTime)[0];
-                            diffHours = printDifference(dateFb, currentTime)[1];
-                            diffMins = printDifference(dateFb, currentTime)[2];
-                            /*Log.e("HomeFragment", "dates" + currentTime + " " + dateFb +
-                                    " " + diffMins+" "+diffHours );*/
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                        if (diffMins <= thresholdTime && diffMins >= 0 && diffDays == 0
-                                && diffHours <= 1) {
-                            String type = grandChild.child("Type").getValue(String.class);
-
-                            if (type != null && type.equalsIgnoreCase("AC")) {
-                                String lat = grandChild.child("Latitude").getValue(String.class);
-                                String lon = grandChild.child("Longitude").getValue(String.class);
-                                Boolean chargingState = grandChild.child("ChargingState")
-                                        .getValue(Boolean.class);
-
-                                Log.e("HomeFragment", "record" + lat + " " + lon + " " + chargingState);
-                                if (chargingState != null && chargingState && lat != null && lon != null) {
-                                    // For dropping a marker at a point on the Map
-                                    LatLng powerMarker = new LatLng(Double.parseDouble(lat),
-                                            Double.parseDouble(lon));
-
-                                    googleMap.addMarker(new MarkerOptions().position(powerMarker)
-                                            .title("Power supply detected")
-                                            .snippet("at " + time.substring(0, 16) + ""));
-                                    Log.e("HomeFragment", "fab? " + thresholdTime + " diff " + diffMins + " " + time);
-                                    Log.e("HomeFragment", "marked" + lat + " " + lon + " " + chargingState);
-                                }
-                            }
-                        }
-
+                    if (key != null && !key.contains("debug")) {
+                        populateMap(key, geoCode, googleMap);
                     }
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e("Home Fragment", "error" + databaseError.toString());
+                Log.e("HomeFragment1", "DB error: " + databaseError.toString());
             }
         });
+
+    }
+
+    private void populateMap(String key, String geoCode, GoogleMap googleMap) {
+        //populate the map using the key and calling a query only if geocode is equal to PostalCode
+
+        databaseStatus.child(key).orderByChild("PostalCode").equalTo(geoCode)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        Log.e("HomeFragment1", "count: " + dataSnapshot.getChildrenCount() + "key: " + key);
+                        for (DataSnapshot grandChild : dataSnapshot.getChildren()) {
+
+
+                            Log.e("HomeFragment1", "record: " + grandChild.getKey() + " Time: " + grandChild.child("Time"));
+
+                            String time = grandChild.child("Time").getValue(String.class);
+                            int diffMins = 0;
+                            int diffHours = 0;
+                            int diffDays = 0;
+                            if (time == null) {
+                                continue;
+                            }
+                            try {
+                                Date dateFb = new SimpleDateFormat("E MMM dd HH:mm:ss z yyyy",
+                                        Locale.ENGLISH).parse(time);
+                                diffDays = printDifference(dateFb, currentTime)[0];
+                                diffHours = printDifference(dateFb, currentTime)[1];
+                                diffMins = printDifference(dateFb, currentTime)[2];
+                            /*Log.e("HomeFragment", "dates" + currentTime + " " + dateFb +
+                                    " " + diffMins+" "+diffHours );*/
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            if (diffMins <= thresholdTime && diffMins >= 0 && diffDays == 0
+                                    && diffHours <= 1) {
+                                String type = grandChild.child("Type").getValue(String.class);
+
+                                if (type != null && type.equalsIgnoreCase("AC")) {
+                                    String lat = grandChild.child("Latitude").getValue(String.class);
+                                    String lon = grandChild.child("Longitude").getValue(String.class);
+                                    Boolean chargingState = grandChild.child("ChargingState")
+                                            .getValue(Boolean.class);
+
+                                    Log.e("HomeFragment1", "record" + lat + " " + lon + " " + chargingState);
+                                    if (chargingState != null && chargingState && lat != null && lon != null) {
+                                        // For dropping a marker at a point on the Map
+                                        LatLng powerMarker = new LatLng(Double.parseDouble(lat),
+                                                Double.parseDouble(lon));
+
+                                        googleMap.addMarker(new MarkerOptions().position(powerMarker)
+                                                .title("Power supply detected")
+                                                .snippet("at " + time.substring(0, 16) + ""));
+                                        Log.e("HomeFragment1", "fab? " + thresholdTime + " diff " + diffMins + " " + time);
+                                        Log.e("HomeFragment1", "marked" + lat + " " + lon + " " + chargingState);
+                                    }
+                                }
+                            }
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Log.e("HomeFragment1", "DBerror:" + databaseError.toString());
+                    }
+                });
 
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.e("HomeFragment", "Permission granted");
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
+        if (requestCode == MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION) {// If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.e("HomeFragment", "Permission granted");
+                // permission was granted, yay! Do the
+                // contacts-related task you need to do.
 
-                } else {
-                    Log.e("HomeFragment", "Permission denied");
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-
+            } else {
+                Log.e("HomeFragment", "Permission denied");
+                // permission denied, boo! Disable the
+                // functionality that depends on this permission.
             }
-            default:
-                break;
-            // other 'case' lines to check for other
-            // permissions this app might request.
-        }
+        }// other 'case' lines to check for other
+        // permissions this app might request.
     }
 
     @Override
@@ -380,7 +426,7 @@ public class HomeFragment extends Fragment {
         mMapView.onLowMemory();
     }
 
-    public static HomeFragment newInstance() {
+    static HomeFragment newInstance() {
         return new HomeFragment();
     }
 
@@ -407,5 +453,35 @@ public class HomeFragment extends Fragment {
 
         int[] diffs = {(int) elapsedDays, (int) elapsedHours, (int) elapsedMinutes};
         return diffs;
+    }
+
+    private String getAddressFromLocation(double latitude, double longitude) {
+
+        Geocoder geocoder = new Geocoder(getContext(), Locale.ENGLISH);
+        String geoCodeString = "";
+
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+
+            if (addresses.size() > 0) {
+                Address fetchedAddress = addresses.get(0);
+                //String postalCode=fetchedAddress.getPostalCode();
+                //String locality=fetchedAddress.getLocality();
+
+                geoCodeString = fetchedAddress.getPostalCode();
+                Log.e("workM", "Geo CODE" + geoCodeString);
+
+
+            } else {
+                geoCodeString = "";
+                Log.e("workM", "address<=0" + geoCodeString);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e("workM", "catch: " + e.toString());
+
+        }
+        return geoCodeString;
     }
 }

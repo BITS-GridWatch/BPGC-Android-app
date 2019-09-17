@@ -32,7 +32,6 @@ import static android.content.Context.MODE_PRIVATE;
 public class SettingsFragment extends Fragment {
 
     private TextView usernameTextView;
-    private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private AlertDialog alertDialog;
     private AlertDialog.Builder alertDialogBuilder;
@@ -41,7 +40,7 @@ public class SettingsFragment extends Fragment {
 
     //shared preferences for theme
     private SharedPreferences theme_shared_preferences;
-    private  SharedPreferences.Editor theme_editor;
+    private SharedPreferences.Editor theme_editor;
 
     private Switch allowSwitch;
 
@@ -57,17 +56,17 @@ public class SettingsFragment extends Fragment {
         Button signOutButton = view.findViewById(R.id.button_signout_settings);
         Button signInButton = view.findViewById(R.id.button_signin_settings);
         allowSwitch = view.findViewById(R.id.switch_monitor_settings);
-        sharedPreferences = getContext().getSharedPreferences("AllowMoniSharedPref", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = Objects.requireNonNull(getContext()).getSharedPreferences("AllowMoniSharedPref", MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
         //shared preferences for theme
-        theme_shared_preferences  = getActivity().getSharedPreferences("ThemeOptions",MODE_PRIVATE);
+        theme_shared_preferences = Objects.requireNonNull(getActivity()).getSharedPreferences("ThemeOptions", MODE_PRIVATE);
         theme_editor = theme_shared_preferences.edit();
 
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!((MainActivity) getActivity()).getSignedInStatus()) {
+                if (!((MainActivity) Objects.requireNonNull(getActivity())).getSignedInStatus()) {
                     ((MainActivity) getActivity()).userSignIn();
                     updateUser();
                 } else
@@ -77,7 +76,7 @@ public class SettingsFragment extends Fragment {
         signOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity) getActivity()).userSignOut();
+                ((MainActivity) Objects.requireNonNull(getActivity())).userSignOut();
                 usernameTextView.setText(R.string.guest);
             }
         });
@@ -132,7 +131,7 @@ public class SettingsFragment extends Fragment {
 
         TextView theme_select = view.findViewById(R.id.theme_select);
 
-        CharSequence[] app_themes = {"Light","Dark","Set by Batter Saver"};
+        CharSequence[] app_themes = {"Light", "Dark", "Set by Batter Saver"};
 
         theme_select.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,32 +141,31 @@ public class SettingsFragment extends Fragment {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("Select App Theme");
-                builder.setSingleChoiceItems(app_themes, theme_shared_preferences.getInt("Theme",0) - 1, new DialogInterface.OnClickListener() {
+                builder.setSingleChoiceItems(app_themes, theme_shared_preferences.getInt("Theme", 0) - 1, new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int item) {
 
-                        switch(item)
-                        {
+                        switch (item) {
                             case 0:
 
 //                                Toast.makeText(getContext(), "Light Theme Selected", Toast.LENGTH_LONG).show();
                                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                                theme_editor.putInt("Theme",AppCompatDelegate.MODE_NIGHT_NO);
-                                theme_editor.commit();
+                                theme_editor.putInt("Theme", AppCompatDelegate.MODE_NIGHT_NO);
+                                theme_editor.apply();
                                 break;
                             case 1:
 
 //                                Toast.makeText(getContext(), "Dark Theme Selected", Toast.LENGTH_LONG).show();
                                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                                theme_editor.putInt("Theme",AppCompatDelegate.MODE_NIGHT_YES);
-                                theme_editor.commit();
+                                theme_editor.putInt("Theme", AppCompatDelegate.MODE_NIGHT_YES);
+                                theme_editor.apply();
                                 break;
                             case 2:
 
 //                                Toast.makeText(getContext(), "Theme Set by Battery Saver Selected", Toast.LENGTH_LONG).show();
                                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
-                                theme_editor.putInt("Theme",AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
-                                theme_editor.commit();
+                                theme_editor.putInt("Theme", AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
+                                theme_editor.apply();
                                 break;
                         }
                         dialog.dismiss();
@@ -179,7 +177,6 @@ public class SettingsFragment extends Fragment {
 
             }
         });
-
 
 
         return view;
@@ -198,7 +195,7 @@ public class SettingsFragment extends Fragment {
         updateUser();
     }
 
-    public static SettingsFragment newInstance() {
+    static SettingsFragment newInstance() {
         return new SettingsFragment();
     }
 
@@ -210,7 +207,7 @@ public class SettingsFragment extends Fragment {
             usernameTextView.setText(R.string.guest);
     }
 
-    private void updateAllowSwitchState(){
+    private void updateAllowSwitchState() {
         Boolean switchState = ((MainActivity) Objects.requireNonNull(getActivity())).getAllowMonitoring();
         allowSwitch.setChecked(switchState);
         editor.putBoolean("allow", switchState);
