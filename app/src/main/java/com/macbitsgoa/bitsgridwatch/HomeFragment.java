@@ -106,12 +106,12 @@ public class HomeFragment extends Fragment {
                 //set theme
                 PowerManager powerManager = (PowerManager) getActivity().getSystemService(Context.POWER_SERVICE);
 
-                theme_shared_preferences = getActivity().getSharedPreferences("ThemeOptions", MODE_PRIVATE);
-                int theme = theme_shared_preferences.getInt("Theme", 0);
+                theme_shared_preferences  = getActivity().getSharedPreferences("ThemeOptions",MODE_PRIVATE);
+                int theme = theme_shared_preferences.getInt("Theme",0);
 
-                if (theme == AppCompatDelegate.MODE_NIGHT_YES || (theme == AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY && powerManager.isPowerSaveMode())) {
-                    googleMap.setMapStyle(new MapStyleOptions(getResources()
-                            .getString(R.string.map_style_json)));
+                if (theme == AppCompatDelegate.MODE_NIGHT_YES || (theme == AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY && powerManager.isPowerSaveMode()) )
+                {
+                    googleMap.setMapStyle(new MapStyleOptions(getResources().getString(R.string.map_style_json)));
 
                 }
 
@@ -147,6 +147,8 @@ public class HomeFragment extends Fragment {
                     return;
                 } else {
                     // Permission has already been granted
+
+
 
 
                     googleMap.setMyLocationEnabled(true);
@@ -321,20 +323,27 @@ public class HomeFragment extends Fragment {
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
-        if (requestCode == MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION) {// If request is cancelled, the result arrays are empty.
-            if (grantResults.length > 0
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.e("HomeFragment", "Permission granted");
-                // permission was granted, yay! Do the
-                // contacts-related task you need to do.
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.e("HomeFragment", "Permission granted");
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
 
-            } else {
-                Log.e("HomeFragment", "Permission denied");
-                // permission denied, boo! Disable the
-                // functionality that depends on this permission.
+                } else {
+                    Log.e("HomeFragment", "Permission denied");
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+
             }
-        }// other 'case' lines to check for other
-        // permissions this app might request.
+            default:
+                break;
+            // other 'case' lines to check for other
+            // permissions this app might request.
+        }
     }
 
     @Override
@@ -371,7 +380,7 @@ public class HomeFragment extends Fragment {
         mMapView.onLowMemory();
     }
 
-    static HomeFragment newInstance() {
+    public static HomeFragment newInstance() {
         return new HomeFragment();
     }
 
