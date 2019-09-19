@@ -122,7 +122,7 @@ public class HomeFragment extends Fragment {
 
 
                 // For showing a move to my location button
-                if (getContext().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                if (Objects.requireNonNull(getContext()).checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
                         != PackageManager.PERMISSION_GRANTED
                         && getContext().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
                         != PackageManager.PERMISSION_GRANTED) {
