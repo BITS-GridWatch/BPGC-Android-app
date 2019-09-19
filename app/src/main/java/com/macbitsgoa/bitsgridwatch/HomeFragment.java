@@ -263,45 +263,47 @@ public class HomeFragment extends Fragment {
         assert locationManager != null;
         Location location = locationManager.getLastKnownLocation(locationManager
                 .getBestProvider(criteria, false));
-        double locationLatitude = location.getLatitude();
-        double locationLongitude = location.getLongitude();
-        //current lat long found
-        Log.e("HomeFragment", "Lat " + locationLatitude + "Long " + locationLongitude);
+        if(location!=null) {
+            double locationLatitude = location.getLatitude();
+            double locationLongitude = location.getLongitude();
 
-        //Geo coding current lat and long
-        String geoCode = getAddressFromLocation(locationLatitude, locationLongitude);
+            //current lat long found
+            Log.e("HomeFragment", "Lat " + locationLatitude + "Long " + locationLongitude);
 
-        Log.e("HomeFragment", "PinCode " + geoCode);
+            //Geo coding current lat and long
+            String geoCode = getAddressFromLocation(locationLatitude, locationLongitude);
 
-
-        //Camera zooms for the display map
-        centre = new LatLng(locationLatitude, locationLongitude);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centre, 0));
-        CameraPosition cameraPosition = new CameraPosition.Builder().target(centre)
-                .zoom(16f).tilt(10).build();
-        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            Log.e("HomeFragment", "PinCode " + geoCode);
 
 
-        //getting the list of users(key) as needed to call the query in populateMap()
-        databaseUsers.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot child :
-                        dataSnapshot.getChildren()) {
-                    String key = child.getKey();
+            //Camera zooms for the display map
+            centre = new LatLng(locationLatitude, locationLongitude);
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centre, 0));
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(centre)
+                    .zoom(16f).tilt(10).build();
+            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
-                    if (key != null && !key.contains("debug")) {
-                        populateMap(key, geoCode, googleMap);
+
+            //getting the list of users(key) as needed to call the query in populateMap()
+            databaseUsers.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot child :
+                            dataSnapshot.getChildren()) {
+                        String key = child.getKey();
+
+                        if (key != null && !key.contains("debug")) {
+                            populateMap(key, geoCode, googleMap);
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e("HomeFragment1", "DB error: " + databaseError.toString());
-            }
-        });
-
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.e("HomeFragment1", "DB error: " + databaseError.toString());
+                }
+            });
+        }
     }
 
     private void populateMap(String key, String geoCode, GoogleMap googleMap) {
