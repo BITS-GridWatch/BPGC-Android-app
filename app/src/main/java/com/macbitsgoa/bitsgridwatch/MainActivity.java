@@ -53,12 +53,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        //set theme
-        //shared preferences for theme
-        SharedPreferences theme_shared_preferences = this.getSharedPreferences("ThemeOptions", MODE_PRIVATE);
-        int theme = theme_shared_preferences.getInt("Theme", 0);
-
-        AppCompatDelegate.setDefaultNightMode(theme);
+//        //set theme
+//        //shared preferences for theme
+//        SharedPreferences theme_shared_preferences = this.getSharedPreferences("ThemeOptions", MODE_PRIVATE);
+//        int theme = theme_shared_preferences.getInt("Theme", 0);
+//
+//        AppCompatDelegate.setDefaultNightMode(theme);
 
 
         if (this.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
