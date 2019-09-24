@@ -30,6 +30,12 @@ public class SplashScreen extends AppCompatActivity {
 
         AppCompatDelegate.setDefaultNightMode(theme);
 
+
+        //shared preferences for onboarding
+        SharedPreferences onboarding_shared_preferences = this.getSharedPreferences("Onboarding",MODE_PRIVATE);
+        boolean onboarding_complete = onboarding_shared_preferences.getBoolean("Onboarding Complete",false);
+
+
         actionBar = getSupportActionBar();
         actionBar.hide();
 
@@ -40,10 +46,22 @@ public class SplashScreen extends AppCompatActivity {
         new Handler().postDelayed(new Runnable(){
             @Override
             public void run() {
-                /* Create an Intent that will start the Menu-Activity. */
-                Intent mainIntent = new Intent(SplashScreen.this, MainActivity.class);
-                SplashScreen.this.startActivity(mainIntent);
-                SplashScreen.this.finish();
+
+                //if onboarding not completed i.e. first time user
+                if (onboarding_complete == false)
+                {
+                    Intent mainIntent = new Intent(SplashScreen.this, OnboardingActivity.class);
+                    SplashScreen.this.startActivity(mainIntent);
+                    SplashScreen.this.finish();
+                }
+                //if onboarding already completed
+                else
+                {
+                    Intent mainIntent = new Intent(SplashScreen.this, MainActivity.class);
+                    SplashScreen.this.startActivity(mainIntent);
+                    SplashScreen.this.finish();
+                }
+
             }
         }, SPLASH_DISPLAY_LENGTH);
 

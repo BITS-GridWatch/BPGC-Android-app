@@ -2,6 +2,7 @@ package com.macbitsgoa.bitsgridwatch;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -139,9 +140,15 @@ public class SettingsFragment extends Fragment {
 
                 AlertDialog alertDialog = null;
 
+
+                int checked_item = 0;
+
+                if (theme_shared_preferences.getInt("Theme", 0) - 1 >= 0)
+                    checked_item = theme_shared_preferences.getInt("Theme", 0) - 1;
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("Select App Theme");
-                builder.setSingleChoiceItems(app_themes, theme_shared_preferences.getInt("Theme", 0) - 1, new DialogInterface.OnClickListener() {
+                builder.setTitle("Choose Theme");
+                builder.setSingleChoiceItems(app_themes,checked_item , new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int item) {
 
@@ -178,6 +185,19 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+
+        //Help option
+
+        TextView help_option = view.findViewById(R.id.help_option);
+
+        help_option.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent mainIntent = new Intent(getContext(), OnboardingActivity.class);
+                getContext().startActivity(mainIntent);
+            }
+        });
 
         return view;
     }

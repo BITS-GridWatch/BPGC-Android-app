@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
+        <activity android:name=".OnboardingActivity"></activity>
         <activity android:name=".SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,20 +24,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
-        <activity android:name="com.macbitsgoa.bitsgridwatch.MainActivity"
-            android:label="@string/app_name">
-
-        </activity>
-
-        <!--<receiver android:name=".PowerConnectionReceiver">
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"></activity>
+        <!--
+<receiver android:name=".PowerConnectionReceiver">
             <intent-filter>
                  <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
                 <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
             </intent-filter>
-        </receiver>-->
-
+        </receiver>
+        -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/map_api" />

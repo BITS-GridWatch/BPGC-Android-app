@@ -55,6 +55,14 @@
         android:padding="20dp"
         />
 
+    <TextView
+        android:id="@+id/help_option"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Help"
+        android:padding="20dp"
+        />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
