@@ -94,26 +94,10 @@ public class SettingsFragment extends Fragment {
                     //Display dialog box to check if verified.
                     //Start background work only if user accepts.
                     //Reset to false state if user declines.
-                    alertDialogBuilder = new AlertDialog.Builder(getContext());
-                    alertDialogBuilder.setMessage(R.string.disclaimer);
-                    alertDialogBuilder.setPositiveButton(R.string.agree, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            ((MainActivity) Objects.requireNonNull(getActivity())).setAllowMonitoring(true);
-                            ((MainActivity) Objects.requireNonNull(getActivity())).startBackgroundWork();
-                            updateAllowSwitchState();
-                        }
-                    });
-                    alertDialogBuilder.setNegativeButton(R.string.decline, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            ((MainActivity) Objects.requireNonNull(getActivity())).setAllowMonitoring(false);
-                            ((MainActivity) Objects.requireNonNull(getActivity())).cancelBackgroundWork();
-                            updateAllowSwitchState();
-                        }
-                    });
-                    alertDialog = alertDialogBuilder.create();
-                    alertDialog.show();
+                    ((MainActivity) Objects.requireNonNull(getActivity())).setAllowMonitoring(true);
+                    ((MainActivity) Objects.requireNonNull(getActivity())).startBackgroundWork();
+                    updateAllowSwitchState();
+                    //launchAllowMonitoringDialog();
                 } else {
                     Log.d(TAG, "allowSwitch = FALSE");
                     ((MainActivity) Objects.requireNonNull(getActivity())).setAllowMonitoring(false);
@@ -232,5 +216,32 @@ public class SettingsFragment extends Fragment {
         allowSwitch.setChecked(switchState);
         editor.putBoolean("allow", switchState);
         editor.commit();
+    }
+
+    private void launchAllowMonitoringDialog () {
+        //Display dialog box to check if verified.
+        //Start background work only if user accepts.
+        //Reset to false state if user declines.
+
+        alertDialogBuilder = new AlertDialog.Builder(getContext());
+        alertDialogBuilder.setMessage(R.string.disclaimer);
+        alertDialogBuilder.setPositiveButton(R.string.agree, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ((MainActivity) Objects.requireNonNull(getActivity())).setAllowMonitoring(true);
+                ((MainActivity) Objects.requireNonNull(getActivity())).startBackgroundWork();
+                updateAllowSwitchState();
+            }
+        });
+        alertDialogBuilder.setNegativeButton(R.string.decline, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ((MainActivity) Objects.requireNonNull(getActivity())).setAllowMonitoring(false);
+                ((MainActivity) Objects.requireNonNull(getActivity())).cancelBackgroundWork();
+                updateAllowSwitchState();
+            }
+        });
+        alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 }
