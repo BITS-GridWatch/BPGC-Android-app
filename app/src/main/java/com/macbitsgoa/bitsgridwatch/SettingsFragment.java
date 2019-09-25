@@ -127,8 +127,8 @@ public class SettingsFragment extends Fragment {
 
                 int checked_item = 0;
 
-                if (theme_shared_preferences.getInt("Theme", 0) - 1 >= 0)
-                    checked_item = theme_shared_preferences.getInt("Theme", 0) - 1;
+                if (theme_shared_preferences.getInt("Theme", AppCompatDelegate.MODE_NIGHT_NO) - 1 >= 0)
+                    checked_item = theme_shared_preferences.getInt("Theme", AppCompatDelegate.MODE_NIGHT_NO) - 1;
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("Choose Theme");

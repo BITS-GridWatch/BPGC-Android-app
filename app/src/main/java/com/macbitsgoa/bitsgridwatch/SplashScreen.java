@@ -26,7 +26,7 @@ public class SplashScreen extends AppCompatActivity {
         //set theme
         //shared preferences for theme
         SharedPreferences theme_shared_preferences = this.getSharedPreferences("ThemeOptions", MODE_PRIVATE);
-        int theme = theme_shared_preferences.getInt("Theme", 0);
+        int theme = theme_shared_preferences.getInt("Theme", AppCompatDelegate.MODE_NIGHT_NO);
 
         AppCompatDelegate.setDefaultNightMode(theme);
 

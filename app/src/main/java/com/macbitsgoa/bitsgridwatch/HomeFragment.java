@@ -113,11 +113,10 @@ public class HomeFragment extends Fragment {
                 PowerManager powerManager = (PowerManager) Objects.requireNonNull(getActivity()).getSystemService(Context.POWER_SERVICE);
 
                 theme_shared_preferences = getActivity().getSharedPreferences("ThemeOptions", MODE_PRIVATE);
-                int theme = theme_shared_preferences.getInt("Theme", 0);
+                int theme = theme_shared_preferences.getInt("Theme", AppCompatDelegate.MODE_NIGHT_NO);
 
                 if (theme == AppCompatDelegate.MODE_NIGHT_YES || (theme == AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY && powerManager.isPowerSaveMode())) {
                     googleMap.setMapStyle(new MapStyleOptions(getResources().getString(R.string.map_style_json)));
-
                 }
 
 
