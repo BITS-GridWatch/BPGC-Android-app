@@ -70,7 +70,7 @@ public class OnboardingActivity extends AppCompatActivity {
 
                     boolean onboarding_complete = onboarding_shared_preferences.getBoolean("Onboarding Complete",false);
 
-                    if (onboarding_complete == false)
+                    if (!onboarding_complete)
                     {
                         onboarding_editor = onboarding_shared_preferences.edit();
 
@@ -106,7 +106,7 @@ public class OnboardingActivity extends AppCompatActivity {
 
                 boolean onboarding_complete = onboarding_shared_preferences.getBoolean("Onboarding Complete",false);
 
-                if (onboarding_complete == false)
+                if (!onboarding_complete)
                 {
                     onboarding_editor = onboarding_shared_preferences.edit();
 

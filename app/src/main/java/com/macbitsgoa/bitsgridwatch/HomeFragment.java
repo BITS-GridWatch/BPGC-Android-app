@@ -262,7 +262,7 @@ public class HomeFragment extends Fragment {
         assert locationManager != null;
         Location location = locationManager.getLastKnownLocation(locationManager
                 .getBestProvider(criteria, false));
-        if(location!=null) {
+        if (location != null) {
             double locationLatitude = location.getLatitude();
             double locationLongitude = location.getLongitude();
 

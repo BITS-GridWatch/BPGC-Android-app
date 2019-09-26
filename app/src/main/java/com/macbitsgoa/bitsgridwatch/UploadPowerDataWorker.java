@@ -165,7 +165,7 @@ public class UploadPowerDataWorker extends Worker implements LocationListener {
                         typeFb.setValue(type);
                     else
                         typeFb.setValue("");
-                    Log.e("workM", "sent to fb :"+geoCode);
+                    Log.e("workM", "sent to fb :" + geoCode);
 
                 } else {
                     Log.e("workM", "retry");
@@ -207,7 +207,7 @@ public class UploadPowerDataWorker extends Worker implements LocationListener {
     private String getAddressFromLocation(double latitude, double longitude) {
 
         Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.ENGLISH);
-        String geoCodeString="";
+        String geoCodeString = "";
 
         try {
             List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
@@ -217,18 +217,18 @@ public class UploadPowerDataWorker extends Worker implements LocationListener {
                 //String postalCode=fetchedAddress.getPostalCode();
                 //String locality=fetchedAddress.getLocality();
 
-                geoCodeString=fetchedAddress.getPostalCode();
-                Log.e("workM","Geo CODE"+geoCodeString);
+                geoCodeString = fetchedAddress.getPostalCode();
+                Log.e("workM", "Geo CODE" + geoCodeString);
 
 
             } else {
-                geoCodeString="";
-                Log.e("workM","address<=0"+geoCodeString);
+                geoCodeString = "";
+                Log.e("workM", "address<=0" + geoCodeString);
             }
 
         } catch (IOException e) {
             e.printStackTrace();
-            Log.e("workM","catch: "+e.toString());
+            Log.e("workM", "catch: " + e.toString());
             //printToast("Could not get address..!");
         }
         return geoCodeString;

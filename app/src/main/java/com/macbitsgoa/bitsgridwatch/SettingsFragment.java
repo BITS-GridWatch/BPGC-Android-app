@@ -34,8 +34,6 @@ public class SettingsFragment extends Fragment {
 
     private TextView usernameTextView;
     private SharedPreferences.Editor editor;
-    private AlertDialog alertDialog;
-    private AlertDialog.Builder alertDialogBuilder;
 
     private String TAG = "Settings Fragment";
 
@@ -132,7 +130,7 @@ public class SettingsFragment extends Fragment {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("Choose Theme");
-                builder.setSingleChoiceItems(app_themes,checked_item , new DialogInterface.OnClickListener() {
+                builder.setSingleChoiceItems(app_themes, checked_item, new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int item) {
 
@@ -218,12 +216,12 @@ public class SettingsFragment extends Fragment {
         editor.commit();
     }
 
-    private void launchAllowMonitoringDialog () {
+    private void launchAllowMonitoringDialog() {
         //Display dialog box to check if verified.
         //Start background work only if user accepts.
         //Reset to false state if user declines.
 
-        alertDialogBuilder = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
         alertDialogBuilder.setMessage(R.string.disclaimer);
         alertDialogBuilder.setPositiveButton(R.string.agree, new DialogInterface.OnClickListener() {
             @Override
@@ -241,7 +239,7 @@ public class SettingsFragment extends Fragment {
                 updateAllowSwitchState();
             }
         });
-        alertDialog = alertDialogBuilder.create();
+        AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
 }

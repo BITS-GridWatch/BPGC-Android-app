@@ -15,8 +15,6 @@ public class SplashScreen extends AppCompatActivity {
 
     private final int SPLASH_DISPLAY_LENGTH = 1000;
 
-    private ActionBar actionBar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState){
 
@@ -36,7 +34,8 @@ public class SplashScreen extends AppCompatActivity {
         boolean onboarding_complete = onboarding_shared_preferences.getBoolean("Onboarding Complete",false);
 
 
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
         actionBar.hide();
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -48,7 +47,7 @@ public class SplashScreen extends AppCompatActivity {
             public void run() {
 
                 //if onboarding not completed i.e. first time user
-                if (onboarding_complete == false)
+                if (!onboarding_complete)
                 {
                     Intent mainIntent = new Intent(SplashScreen.this, OnboardingActivity.class);
                     SplashScreen.this.startActivity(mainIntent);
