@@ -25,7 +25,7 @@ public class OnboardingSliderAdapter extends PagerAdapter {
     }
 
     public String[] slide_titles = {
-            "Welcome to Ujala!" , "The Map" , "The Settings"
+            "Welcome to UJALA!" , "The Map" , "The Settings"
     } ;
 
     public String[] slide_descriptions = {

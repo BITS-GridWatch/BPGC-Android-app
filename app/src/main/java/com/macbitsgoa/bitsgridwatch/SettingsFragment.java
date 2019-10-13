@@ -1,15 +1,22 @@
 package com.macbitsgoa.bitsgridwatch;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +32,8 @@ import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
@@ -34,7 +43,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class SettingsFragment extends Fragment {
 
-    private TextView usernameTextView;
+    private TextView usernameTextView, username_field, allow_monitoring, theme_select;
     private SharedPreferences.Editor editor;
 
     private String TAG = "Settings Fragment";
@@ -45,6 +54,7 @@ public class SettingsFragment extends Fragment {
 
     private Switch allowSwitch;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -54,6 +64,9 @@ public class SettingsFragment extends Fragment {
         //Initialize layout elements here
         //-------------------------------
         usernameTextView = view.findViewById(R.id.textview_username_settings);
+        username_field = view.findViewById(R.id.textview_username);
+        allow_monitoring = view.findViewById(R.id.allow_monitoring);
+        theme_select = view.findViewById(R.id.theme_select);
         Button signOutButton = view.findViewById(R.id.button_signout_settings);
         Button signInButton = view.findViewById(R.id.button_signin_settings);
         allowSwitch = view.findViewById(R.id.switch_monitor_settings);
@@ -114,56 +127,194 @@ public class SettingsFragment extends Fragment {
 
         //theme option
 
-        TextView theme_select = view.findViewById(R.id.theme_select);
-
         CharSequence[] app_themes = {"Light", "Dark", "Set by Batter Saver"};
 
         theme_select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                AlertDialog alertDialog = null;
+//                AlertDialog alertDialog = null;
 
+                int theme = theme_shared_preferences.getInt("Theme", AppCompatDelegate.MODE_NIGHT_NO);
 
                 int checked_item = 0;
 
                 if (theme_shared_preferences.getInt("Theme", AppCompatDelegate.MODE_NIGHT_NO) - 1 >= 0)
                     checked_item = theme_shared_preferences.getInt("Theme", AppCompatDelegate.MODE_NIGHT_NO) - 1;
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("Choose Theme");
-                builder.setSingleChoiceItems(app_themes, checked_item, new DialogInterface.OnClickListener() {
+                AlertDialog alertDialog = null;
 
-                    public void onClick(DialogInterface dialog, int item) {
+                LinearLayout alert_dialog_layout = new LinearLayout(getContext());
+                alert_dialog_layout.setOrientation(LinearLayout.VERTICAL);
+                alert_dialog_layout.setPadding(20,20,20,20);
 
-                        switch (item) {
-                            case 0:
+                TextView alert_dialog_title = new TextView(alert_dialog_layout.getContext());
+                alert_dialog_title.setText("Choose theme");
+                alert_dialog_title.setTextSize(25);
+                alert_dialog_title.setPadding(40,20,20,20);
 
-//                                Toast.makeText(getContext(), "Light Theme Selected", Toast.LENGTH_LONG).show();
-                                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                                theme_editor.putInt("Theme", AppCompatDelegate.MODE_NIGHT_NO);
-                                theme_editor.apply();
-                                break;
-                            case 1:
+                Typeface typeface_medium = getResources().getFont(R.font.montserrat_medium);
+                alert_dialog_title.setTypeface(typeface_medium);
 
-//                                Toast.makeText(getContext(), "Dark Theme Selected", Toast.LENGTH_LONG).show();
-                                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                                theme_editor.putInt("Theme", AppCompatDelegate.MODE_NIGHT_YES);
-                                theme_editor.apply();
-                                break;
-                            case 2:
+                RadioGroup radioGroup = new RadioGroup(alert_dialog_layout.getContext());
+                radioGroup.setOrientation(RadioGroup.VERTICAL);
+                radioGroup.setPadding(20,20,20,40);
 
-//                                Toast.makeText(getContext(), "Theme Set by Battery Saver Selected", Toast.LENGTH_LONG).show();
-                                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
-                                theme_editor.putInt("Theme", AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
-                                theme_editor.apply();
-                                break;
-                        }
-                        dialog.dismiss();
+                RadioButton radio_button_light = new RadioButton(alert_dialog_layout.getContext());
+                RadioButton radio_button_dark = new RadioButton(alert_dialog_layout.getContext());
+                RadioButton radio_button_set_by_battery_saver = new RadioButton(alert_dialog_layout.getContext());
+
+                radio_button_light.setText("Light");
+                radio_button_dark.setText("Dark");
+                radio_button_set_by_battery_saver.setText("Set by Battery Saver");
+
+                radio_button_light.setTextSize(17);
+                radio_button_dark.setTextSize(17);
+                radio_button_set_by_battery_saver.setTextSize(17);
+
+                Typeface typeface_regular = getResources().getFont(R.font.montserrat_regular);
+                radio_button_light.setTypeface(typeface_regular);
+                radio_button_dark.setTypeface(typeface_regular);
+                radio_button_set_by_battery_saver.setTypeface(typeface_regular);
+
+                radio_button_light.setPadding(20,20,20,20);
+                radio_button_dark.setPadding(20,20,20,20);
+                radio_button_set_by_battery_saver.setPadding(20,20,20,20);
+
+                radioGroup.addView(radio_button_light);
+                radioGroup.addView(radio_button_dark);
+                radioGroup.addView(radio_button_set_by_battery_saver);
+
+                if (theme == AppCompatDelegate.MODE_NIGHT_NO)
+                {
+                    alert_dialog_layout.setBackgroundColor(getResources().getColor(R.color.white));
+                    alert_dialog_title.setTextColor(getResources().getColor(R.color.black));
+                }
+                else if (theme == AppCompatDelegate.MODE_NIGHT_YES)
+                {
+                    alert_dialog_layout.setBackgroundColor(getResources().getColor(R.color.tv_back));
+                    alert_dialog_title.setTextColor(getResources().getColor(R.color.white));
+                }
+                else
+                {
+                    PowerManager powerManager = (PowerManager) getActivity().getSystemService(Context.POWER_SERVICE);
+                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+                            && powerManager.isPowerSaveMode())
+                    {
+                        alert_dialog_layout.setBackgroundColor(getResources().getColor(R.color.tv_back));
+                        alert_dialog_title.setTextColor(getResources().getColor(R.color.white));
                     }
-                });
+                    else
+                    {
+                        alert_dialog_title.setTextColor(getResources().getColor(R.color.black));
+                    }
+                }
+
+                if (checked_item == 0)
+                    radio_button_light.setChecked(true);
+                else if (checked_item == 1)
+                    radio_button_dark.setChecked(true);
+                else
+                    radio_button_set_by_battery_saver.setChecked(true);
+
+
+                alert_dialog_layout.addView(alert_dialog_title);
+                alert_dialog_layout.addView(radioGroup);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setView(alert_dialog_layout);
                 alertDialog = builder.create();
                 alertDialog.show();
+
+                AlertDialog finalAlertDialog = alertDialog;
+
+                radio_button_light.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                        theme_editor.putInt("Theme", AppCompatDelegate.MODE_NIGHT_NO);
+                        theme_editor.apply();
+                        finalAlertDialog.dismiss();
+
+                    }
+                });
+
+                radio_button_dark.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                        theme_editor.putInt("Theme", AppCompatDelegate.MODE_NIGHT_YES);
+                        theme_editor.apply();
+                        finalAlertDialog.dismiss();
+
+                    }
+                });
+
+
+                radio_button_set_by_battery_saver.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
+                        theme_editor.putInt("Theme", AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
+                        theme_editor.apply();
+                        finalAlertDialog.dismiss();
+
+                    }
+                });
+
+
+
+
+
+//                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//                //set font
+//                Typeface typeface_regular = getResources().getFont(R.font.montserrat_medium);
+//                TextView alert_dialog_title = new TextView(getContext());
+//                alert_dialog_title.setPadding(50,20,10,10);
+//                alert_dialog_title.setTextSize(22);
+//                alert_dialog_title.setTextColor(getResources().getColor(R.color.black));
+//                alert_dialog_title.setText("Choose theme");
+//                alert_dialog_title.setTypeface(typeface_regular);
+//                builder.setCustomTitle(alert_dialog_title);
+////                builder.setTitle("Choose theme");
+//                builder.setSingleChoiceItems(app_themes, checked_item, new DialogInterface.OnClickListener() {
+//
+//                    public void onClick(DialogInterface dialog, int item) {
+//
+//                        switch (item) {
+//                            case 0:
+//
+////                                Toast.makeText(getContext(), "Light Theme Selected", Toast.LENGTH_LONG).show();
+//                                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+//                                theme_editor.putInt("Theme", AppCompatDelegate.MODE_NIGHT_NO);
+//                                theme_editor.apply();
+//                                break;
+//                            case 1:
+//
+////                                Toast.makeText(getContext(), "Dark Theme Selected", Toast.LENGTH_LONG).show();
+//                                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+//                                theme_editor.putInt("Theme", AppCompatDelegate.MODE_NIGHT_YES);
+//                                theme_editor.apply();
+//                                break;
+//                            case 2:
+//
+////                                Toast.makeText(getContext(), "Theme Set by Battery Saver Selected", Toast.LENGTH_LONG).show();
+//                                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
+//                                theme_editor.putInt("Theme", AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
+//                                theme_editor.apply();
+//                                break;
+//                        }
+//                        dialog.dismiss();
+//                    }
+//                });
+//                alertDialog = builder.create();
+//                alertDialog.show();
+
+
+
 
 
             }
@@ -193,6 +344,17 @@ public class SettingsFragment extends Fragment {
                 getContext().startActivity(mainIntent);
             }
         });
+
+        //set font
+        Typeface typeface_regular = getResources().getFont(R.font.montserrat_regular);
+        usernameTextView.setTypeface(typeface_regular);
+        username_field.setTypeface(typeface_regular);
+        allow_monitoring.setTypeface(typeface_regular);
+        theme_select.setTypeface(typeface_regular);
+        help_option.setTypeface(typeface_regular);
+        about_option.setTypeface(typeface_regular);
+        signInButton.setTypeface(typeface_regular);
+        signOutButton.setTypeface(typeface_regular);
 
         return view;
     }

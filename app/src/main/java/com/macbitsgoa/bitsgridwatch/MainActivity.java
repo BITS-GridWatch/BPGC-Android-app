@@ -5,9 +5,12 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -23,6 +26,8 @@ import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
@@ -46,11 +51,27 @@ public class MainActivity extends AppCompatActivity {
 
     private static PeriodicWorkRequest saveRequest;
 
+    private ActionBar actionBar;
+
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowCustomEnabled(true);
+
+        TextView app_title = new TextView(this);
+        app_title.setText("UJALA");
+        app_title.setTextSize(20);
+
+        Typeface typeface_medium = getResources().getFont(R.font.montserrat_medium);
+        app_title.setTypeface(typeface_medium);
+
+        actionBar.setCustomView(app_title);
 
 //        //set theme
 //        //shared preferences for theme

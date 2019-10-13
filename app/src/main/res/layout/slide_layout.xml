@@ -22,7 +22,7 @@
         android:textAlignment="center"
         android:textSize="30sp"
         android:padding="10dp"
-        android:fontFamily="sans-serif-smallcaps"
+        android:fontFamily="@font/montserrat_medium"
         />
 
     <TextView
@@ -33,7 +33,7 @@
         android:textSize="15sp"
         android:paddingTop="10dp"
         android:paddingHorizontal="40dp"
-        android:fontFamily="sans-serif-light"
+        android:fontFamily="@font/montserrat_regular"
         />
 
 

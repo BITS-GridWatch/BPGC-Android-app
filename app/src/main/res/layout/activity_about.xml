@@ -19,10 +19,9 @@
         android:id="@+id/app_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Ujala"
+        android:text="UJALA"
         android:textSize="40sp"
         android:textAlignment="center"
-        android:textColor="@color/black"
         />
 
     <TextView
