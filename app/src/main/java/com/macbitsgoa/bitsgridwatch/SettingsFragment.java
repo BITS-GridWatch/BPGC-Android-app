@@ -345,6 +345,17 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        TextView feedback_option = view.findViewById(R.id.feedback_option);
+
+        feedback_option.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(getContext(), FeedbackActivity.class);
+                getContext().startActivity(intent);
+            }
+        });
+
         //set font
         Typeface typeface_regular = getResources().getFont(R.font.montserrat_regular);
         usernameTextView.setTypeface(typeface_regular);
@@ -352,6 +363,7 @@ public class SettingsFragment extends Fragment {
         allow_monitoring.setTypeface(typeface_regular);
         theme_select.setTypeface(typeface_regular);
         help_option.setTypeface(typeface_regular);
+        feedback_option.setTypeface(typeface_regular);
         about_option.setTypeface(typeface_regular);
         signInButton.setTypeface(typeface_regular);
         signOutButton.setTypeface(typeface_regular);

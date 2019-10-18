@@ -67,6 +67,14 @@
         />
 
     <TextView
+        android:id="@+id/feedback_option"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Feedback"
+        android:padding="20dp"
+        />
+
+    <TextView
         android:id="@+id/about_option"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

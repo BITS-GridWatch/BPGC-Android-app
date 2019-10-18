@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.macbitsgoa.bitsgridwatch.FeedbackActivity">
+
+    <TextView
+        android:id="@+id/instruction_rating"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Rate your experience on the scale of 1 to 5:"
+        android:fontFamily="@font/montserrat_regular"
+        android:padding="20dp"
+        />
+
+
+    <RatingBar
+        android:id="@+id/rating_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        />
+
+
+    <TextView
+        android:id="@+id/instruction_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Enter your feedback here:"
+        android:fontFamily="@font/montserrat_regular"
+        android:padding="20dp"
+        />
+
+    <EditText
+        android:id="@+id/feedback_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_regular"
+        android:maxLines="5"
+        android:padding="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:scrollbars="vertical"
+        />
+
+    <Button
+        android:id="@+id/submit_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="SUBMIT"
+        android:padding="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:fontFamily="@font/montserrat_regular"
+        style="@style/Widget.AppCompat.Button.Colored"/>
+
+
+
+</LinearLayout>
