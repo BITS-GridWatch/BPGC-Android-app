@@ -1,6 +1,5 @@
 package com.macbitsgoa.bitsgridwatch;
 
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -136,14 +135,12 @@ public class MainActivity extends AppCompatActivity {
         bottomNav.setSelectedItemId(R.id.item_bottomnav_home);  //Set Home as default selected.
         bottomNav.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
-                case R.id.item_bottomnav_home:
-                    selectedFragment = HomeFragment.newInstance();
-                    break;
                 case R.id.item_bottomnav_settings:
                     selectedFragment = SettingsFragment.newInstance();
                     break;
                 default:                                        //Open Home if nothing is selected somehow.
-                    selectedFragment = HomeFragment.newInstance();
+                    //selectedFragment = HomeFragment.newInstance();
+                    selectedFragment = new HomeFragment();
                     break;
             }
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -193,7 +190,8 @@ public class MainActivity extends AppCompatActivity {
 
         //Manually displaying the first fragment - one time only
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.framelayout_activity_main, HomeFragment.newInstance());
+        //transaction.replace(R.id.framelayout_activity_main, HomeFragment.newInstance());
+        transaction.replace(R.id.framelayout_activity_main, new HomeFragment());
         transaction.commit();
 
         if (!signedInStatus) {

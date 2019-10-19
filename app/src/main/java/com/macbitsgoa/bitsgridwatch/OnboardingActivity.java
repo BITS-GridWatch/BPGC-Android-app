@@ -33,6 +33,7 @@ public class OnboardingActivity extends AppCompatActivity {
     //shared preferences for onboarding
     private SharedPreferences onboarding_shared_preferences;
     private SharedPreferences.Editor onboarding_editor;
+    private SharedPreferences prefs;
 
 
     @Override
@@ -58,6 +59,7 @@ public class OnboardingActivity extends AppCompatActivity {
 
         slide_pager.addOnPageChangeListener(viewListener);
 
+        prefs = getSharedPreferences("AllowMoniSharedPref", MODE_PRIVATE);
 
         next_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,8 +78,13 @@ public class OnboardingActivity extends AppCompatActivity {
 
                         onboarding_editor.putBoolean("Onboarding Complete", true);
                         onboarding_editor.apply();
-
-                        Intent mainIntent = new Intent(OnboardingActivity.this, MainActivity.class);
+                        Intent mainIntent;
+                        if(!prefs.getBoolean("first_time",true) && prefs.getBoolean("disclaimer",false)){
+                            mainIntent = new Intent(OnboardingActivity.this, MainActivity.class);
+                        }
+                        else {
+                            mainIntent = new Intent(OnboardingActivity.this, DisclaimerActivity.class);
+                        }
                         OnboardingActivity.this.startActivity(mainIntent);
 
                         OnboardingActivity.this.finish();
@@ -113,9 +120,14 @@ public class OnboardingActivity extends AppCompatActivity {
                     onboarding_editor.putBoolean("Onboarding Complete", true);
                     onboarding_editor.apply();
 
-                    Intent mainIntent = new Intent(OnboardingActivity.this, MainActivity.class);
+                    Intent mainIntent;
+                    if(!prefs.getBoolean("first_time",true) && prefs.getBoolean("disclaimer",false)){
+                        mainIntent = new Intent(OnboardingActivity.this, MainActivity.class);
+                    }
+                    else {
+                        mainIntent = new Intent(OnboardingActivity.this, DisclaimerActivity.class);
+                    }
                     OnboardingActivity.this.startActivity(mainIntent);
-
                     OnboardingActivity.this.finish();
                 }
                 else

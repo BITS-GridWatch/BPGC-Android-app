@@ -17,7 +17,7 @@ public class DisclaimerDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(R.string.disclaimer);
-        builder.setPositiveButton(R.string.agree, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 ((MainActivity) Objects.requireNonNull(getActivity())).setAllowMonitoring(true);

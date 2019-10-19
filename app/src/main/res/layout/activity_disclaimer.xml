@@ -1,9 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.macbitsgoa.bitsgridwatch.DisclaimerActivity">
+    tools:context="com.macbitsgoa.bitsgridwatch.DisclaimerActivity"
+    android:orientation="vertical">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:text="@string/disclaimer"
+        android:gravity="center_horizontal|bottom"
+        android:textAlignment="gravity"
+        android:textSize="30sp"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="20"
+        android:textSize="20sp"
+        android:text="@string/disclaimer_body"
+        android:padding="15dp"
+        android:textAlignment="gravity"
+        android:textColor="@color/black"
+        android:gravity="center_vertical|start"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:gravity="end|center_vertical"
+        android:layout_weight="2"
+        android:background="@color/black">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_decline_disclaimer"
+            android:text="@string/decline"
+            android:padding="10dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:textColor="@color/white"
+            android:background="#00000000"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_accept_disclaimer"
+            android:text="@string/accept"
+            android:padding="10dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:textColor="@color/white"
+            android:background="#00000000"/>
+    </LinearLayout>
+</LinearLayout>
