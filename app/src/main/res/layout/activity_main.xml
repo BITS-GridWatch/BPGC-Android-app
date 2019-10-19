@@ -20,6 +20,7 @@
         android:layout_weight="1"
         app:itemIconTint="#88ffffff"
         app:itemTextColor="#ffffff"
-        app:menu="@menu/menu_bottomnav_activity_main" />
+        app:menu="@menu/menu_bottomnav_activity_main"
+        android:theme="@style/BottomNavTheme"/>
 
 </LinearLayout>

@@ -14,15 +14,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:layout_weight="1"
             android:text="@string/username" />
 
         <TextView
             android:id="@+id/textview_username_settings"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:layout_weight="1" />
+            android:textAlignment="textEnd"
+            />
 
     </LinearLayout>
 
