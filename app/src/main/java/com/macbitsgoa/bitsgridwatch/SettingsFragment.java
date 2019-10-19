@@ -403,7 +403,7 @@ public class SettingsFragment extends Fragment {
         editor.commit();
     }
 
-    private void launchAllowMonitoringDialog() {
+    /*private void launchAllowMonitoringDialog() {
         //Display dialog box to check if verified.
         //Start background work only if user accepts.
         //Reset to false state if user declines.
@@ -428,5 +428,5 @@ public class SettingsFragment extends Fragment {
         });
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
-    }
+    }*/
 }

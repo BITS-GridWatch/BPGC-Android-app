@@ -49,15 +49,15 @@ public class SplashScreen extends AppCompatActivity {
                 //if onboarding not completed i.e. first time user
                 if (!onboarding_complete)
                 {
-                    Intent mainIntent = new Intent(SplashScreen.this, OnboardingActivity.class);
-                    SplashScreen.this.startActivity(mainIntent);
+                    Intent intent = new Intent(SplashScreen.this, OnboardingActivity.class);
+                    SplashScreen.this.startActivity(intent);
                     SplashScreen.this.finish();
                 }
                 //if onboarding already completed
                 else
                 {
-                    Intent mainIntent = new Intent(SplashScreen.this, MainActivity.class);
-                    SplashScreen.this.startActivity(mainIntent);
+                    Intent intent = new Intent(SplashScreen.this, DisclaimerActivity.class);
+                    SplashScreen.this.startActivity(intent);
                     SplashScreen.this.finish();
                 }
 

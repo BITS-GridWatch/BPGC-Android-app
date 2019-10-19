@@ -19,9 +19,13 @@
     <string name="last_5_mins_text">Last 5 Mins data</string>
     <string name="last_1_hour_text">Last 1 Hour data</string>
 
-    <string name="disclaimer">Warned</string>
-    <string name="agree">Agree</string>
+    <string name="disclaimer">Disclaimer /\nPrivacy Policy</string>
+    <string name="accept">Accept</string>
     <string name="decline">Decline</string>
+    <string name="disclaimer_body">We at Team Ujala respect your privacy and understand your concerns.\n\n
+    Through the application, Ujala, the team collects the user\'s email address, charging state and location (Latitude, Longitude and Pincode) and store it in the Ujala database.\n\n
+    This information that is collected from the users is not available publicly but it is used by the team to provide the users with the power outages log data.\n\n
+    The team, however, reserves the right to use the data as per the requirements but limited to academic or research purposes only.</string>
 
     <string name="about">About Team Gridwatch</string>
 
