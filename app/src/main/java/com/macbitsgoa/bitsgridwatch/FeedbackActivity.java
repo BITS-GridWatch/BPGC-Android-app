@@ -18,6 +18,14 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Calendar;
+import java.util.Date;
+
 public class FeedbackActivity extends AppCompatActivity {
 
     private ActionBar actionBar;
@@ -84,10 +92,35 @@ public class FeedbackActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference myRef = database.getReference();
+
+                Date currentTime = Calendar.getInstance().getTime();
+                String timevalue = currentTime.toString();
+
+                GoogleSignInAccount googleSignInAccount;
+
+                String uid = "guest";
+
+                if ((googleSignInAccount = (GoogleSignInAccount) GoogleSignIn.getLastSignedInAccount(getApplicationContext())) != null) {
+                    uid = googleSignInAccount.getId();
+                }
+
+                final DatabaseReference star_rating = myRef.child("Feedback").child(timevalue).child("Rating");
+                final DatabaseReference text_feedback = myRef.child("Feedback").child(timevalue).child("Details");
+                final DatabaseReference user_id = myRef.child("Feedback").child(timevalue).child("User ID");
+
+                star_rating.setValue(rating_bar.getRating());
+                text_feedback.setValue(feedback_edit_text.getText().toString());
+                user_id.setValue(uid);
+
+
                 Log.d("rating","" + rating_bar.getRating());
                 Log.d("feedback", feedback_edit_text.getText().toString());
                 Toast toast = Toast.makeText(getApplicationContext(),"Your feedback has been sent.", Toast.LENGTH_SHORT);
                 toast.show();
+
+                onBackPressed();
             }
         });
     }
