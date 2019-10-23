@@ -16,7 +16,7 @@ public class SplashScreen extends AppCompatActivity {
     private final int SPLASH_DISPLAY_LENGTH = 1000;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
@@ -30,8 +30,8 @@ public class SplashScreen extends AppCompatActivity {
 
 
         //shared preferences for onboarding
-        SharedPreferences onboarding_shared_preferences = this.getSharedPreferences("Onboarding",MODE_PRIVATE);
-        boolean onboarding_complete = onboarding_shared_preferences.getBoolean("Onboarding Complete",false);
+        SharedPreferences onboarding_shared_preferences = this.getSharedPreferences("Onboarding", MODE_PRIVATE);
+        boolean onboarding_complete = onboarding_shared_preferences.getBoolean("Onboarding Complete", false);
 
 
         ActionBar actionBar = getSupportActionBar();
@@ -42,20 +42,18 @@ public class SplashScreen extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 
-        new Handler().postDelayed(new Runnable(){
+        new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
 
                 //if onboarding not completed i.e. first time user
-                if (!onboarding_complete)
-                {
+                if (!onboarding_complete) {
                     Intent intent = new Intent(SplashScreen.this, OnboardingActivity.class);
                     SplashScreen.this.startActivity(intent);
                     SplashScreen.this.finish();
                 }
                 //if onboarding already completed
-                else
-                {
+                else {
                     Intent intent = new Intent(SplashScreen.this, DisclaimerActivity.class);
                     SplashScreen.this.startActivity(intent);
                     SplashScreen.this.finish();
@@ -63,8 +61,6 @@ public class SplashScreen extends AppCompatActivity {
 
             }
         }, SPLASH_DISPLAY_LENGTH);
-
-
 
 
     }

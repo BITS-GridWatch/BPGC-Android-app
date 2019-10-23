@@ -70,33 +70,28 @@ public class OnboardingActivity extends AppCompatActivity {
                     //shared preferences for onboarding
                     onboarding_shared_preferences = getSharedPreferences("Onboarding", MODE_PRIVATE);
 
-                    boolean onboarding_complete = onboarding_shared_preferences.getBoolean("Onboarding Complete",false);
+                    boolean onboarding_complete = onboarding_shared_preferences.getBoolean("Onboarding Complete", false);
 
-                    if (!onboarding_complete)
-                    {
+                    if (!onboarding_complete) {
                         onboarding_editor = onboarding_shared_preferences.edit();
 
                         onboarding_editor.putBoolean("Onboarding Complete", true);
                         onboarding_editor.apply();
                         Intent mainIntent;
-                        if(!prefs.getBoolean("first_time",true) && prefs.getBoolean("disclaimer",false)){
+                        if (!prefs.getBoolean("first_time", true) && prefs.getBoolean("disclaimer", false)) {
                             mainIntent = new Intent(OnboardingActivity.this, MainActivity.class);
-                        }
-                        else {
+                        } else {
                             mainIntent = new Intent(OnboardingActivity.this, DisclaimerActivity.class);
                         }
                         OnboardingActivity.this.startActivity(mainIntent);
 
                         OnboardingActivity.this.finish();
-                    }
-                    else
-                    {
+                    } else {
                         OnboardingActivity.this.finish();
 
                     }
 
-                }
-                else {
+                } else {
                     slide_pager.setCurrentItem(currentpage + 1);
                 }
 
@@ -111,27 +106,23 @@ public class OnboardingActivity extends AppCompatActivity {
                 //shared preferences for onboarding
                 onboarding_shared_preferences = getSharedPreferences("Onboarding", MODE_PRIVATE);
 
-                boolean onboarding_complete = onboarding_shared_preferences.getBoolean("Onboarding Complete",false);
+                boolean onboarding_complete = onboarding_shared_preferences.getBoolean("Onboarding Complete", false);
 
-                if (!onboarding_complete)
-                {
+                if (!onboarding_complete) {
                     onboarding_editor = onboarding_shared_preferences.edit();
 
                     onboarding_editor.putBoolean("Onboarding Complete", true);
                     onboarding_editor.apply();
 
                     Intent mainIntent;
-                    if(!prefs.getBoolean("first_time",true) && prefs.getBoolean("disclaimer",false)){
+                    if (!prefs.getBoolean("first_time", true) && prefs.getBoolean("disclaimer", false)) {
                         mainIntent = new Intent(OnboardingActivity.this, MainActivity.class);
-                    }
-                    else {
+                    } else {
                         mainIntent = new Intent(OnboardingActivity.this, DisclaimerActivity.class);
                     }
                     OnboardingActivity.this.startActivity(mainIntent);
                     OnboardingActivity.this.finish();
-                }
-                else
-                {
+                } else {
                     OnboardingActivity.this.finish();
 
                 }
@@ -140,25 +131,21 @@ public class OnboardingActivity extends AppCompatActivity {
     }
 
 
-
-    public void addDotsIndicator(int position)
-    {
+    public void addDotsIndicator(int position) {
         mdots = new TextView[3];
         dot_layout.removeAllViews();
 
-        for (int i=0; i<mdots.length; i++)
-        {
+        for (int i = 0; i < mdots.length; i++) {
             mdots[i] = new TextView(this);
             mdots[i].setText(Html.fromHtml("&#8226;"));
             mdots[i].setTextSize(35);
-            mdots[i].setTextColor(getResources().getColor(R.color.colorAccent));
+            mdots[i].setTextColor(getResources().getColor(R.color.colorAccent, getTheme()));
 
             dot_layout.addView(mdots[i]);
         }
 
-        if (mdots.length > 0)
-        {
-            mdots[position].setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+        if (mdots.length > 0) {
+            mdots[position].setTextColor(getResources().getColor(R.color.colorPrimaryDark, getTheme()));
         }
     }
 
@@ -175,14 +162,11 @@ public class OnboardingActivity extends AppCompatActivity {
 
             currentpage = position;
 
-            if (position == mdots.length - 1)
-            {
+            if (position == mdots.length - 1) {
                 next_button.setText("LET'S GO!");
                 skip_button.setEnabled(false);
                 skip_button.setText("");
-            }
-            else
-            {
+            } else {
                 next_button.setText("NEXT");
                 skip_button.setEnabled(true);
                 skip_button.setText("SKIP");

@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/ujala_logo"
+        android:paddingHorizontal="100dp"
         android:paddingTop="200dp"
-        android:paddingHorizontal="100dp"/>
+        android:src="@drawable/ujala_logo" />
 
     <TextView
         android:id="@+id/app_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_medium"
         android:text="UJALA"
-        android:textSize="40sp"
         android:textAlignment="center"
         android:textColor="#d9d9da"
-        android:fontFamily="@font/montserrat_medium"
-        />
+        android:textSize="40sp" />
 
 </LinearLayout>

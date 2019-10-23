@@ -15,28 +15,27 @@ import androidx.viewpager.widget.PagerAdapter;
 public class OnboardingSliderAdapter extends PagerAdapter {
 
 
-    Context context;
+    private Context context;
 
-    LayoutInflater layoutInflater;
+    private LayoutInflater layoutInflater;
 
-    public OnboardingSliderAdapter(Context context)
-    {
+    public OnboardingSliderAdapter(Context context) {
         this.context = context;
     }
 
     public String[] slide_titles = {
-            "Welcome to UJALA!" , "The Map" , "The Settings"
-    } ;
+            "Welcome to UJALA!", "The Map", "The Settings"
+    };
 
     public String[] slide_descriptions = {
-            "This is an initiative to detect and log power cuts in BITS Pilani, K K Birla Goa Campus. The app monitors your phone and gives you near real-time information about electricity around you." ,
-            "The marks on the map show you the areas with presence of power supply. Additionally, you can choose to view the data from past 5 minutes or past 1 hour by tapping on the floating action button at the bottom right." ,
+            "This is an initiative to detect and log power cuts in BITS Pilani, K K Birla Goa Campus. The app monitors your phone and gives you near real-time information about electricity around you.",
+            "The marks on the map show you the areas with presence of power supply. Additionally, you can choose to view the data from past 5 minutes or past 1 hour by tapping on the floating action button at the bottom right.",
             "The settings page gives you further control over the app, along with options such as changing the theme, toggling the monitoring and viewing your profile."
-    } ;
+    };
 
     public int[] slide_icons = {
-            R.drawable.ujala_logo , R.drawable.map_logo , R.drawable.settings_logo
-    } ;
+            R.drawable.ujala_logo, R.drawable.map_logo, R.drawable.settings_logo
+    };
 
     @Override
     public int getCount() {
@@ -50,14 +49,12 @@ public class OnboardingSliderAdapter extends PagerAdapter {
 
 
     @Override
-    public Object instantiateItem(ViewGroup container, int position)
-    {
+    public Object instantiateItem(ViewGroup container, int position) {
 
         layoutInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
 
 
-
-        View view = layoutInflater.inflate(R.layout.slide_layout,container,false);
+        View view = layoutInflater.inflate(R.layout.slide_layout, container, false);
 
         TextView slide_title = view.findViewById(R.id.slide_title);
         TextView slide_desc = view.findViewById(R.id.slide_desc);
@@ -68,10 +65,9 @@ public class OnboardingSliderAdapter extends PagerAdapter {
         slide_icon.setImageResource(slide_icons[position]);
 
         if (position == 0)
-            slide_icon.setPadding(300,50,300,0);
+            slide_icon.setPadding(300, 50, 300, 0);
         else
-            slide_icon.setPadding(380,50,380,10);
-
+            slide_icon.setPadding(380, 50, 380, 10);
 
 
         container.addView(view);
@@ -83,8 +79,7 @@ public class OnboardingSliderAdapter extends PagerAdapter {
 
     @Override
 
-    public void destroyItem(ViewGroup container, int position, Object object)
-    {
-        container.removeView((RelativeLayout)object);
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        container.removeView((RelativeLayout) object);
     }
 }

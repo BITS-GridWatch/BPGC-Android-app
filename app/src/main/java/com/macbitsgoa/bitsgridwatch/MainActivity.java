@@ -50,8 +50,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static PeriodicWorkRequest saveRequest;
 
-    private ActionBar actionBar;
-
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -59,12 +57,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayShowCustomEnabled(true);
 
         TextView app_title = new TextView(this);
-        app_title.setText("UJALA");
+        app_title.setText(getResources().getString(R.string.app_name));
         app_title.setTextSize(20);
 
         Typeface typeface_medium = getResources().getFont(R.font.montserrat_medium);
