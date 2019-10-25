@@ -148,17 +148,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-        //activating the PowerConnectionReceiver
-/*
 
-        IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        Intent batteryStatus = registerReceiver(null, ifilter);
-
-        PowerConnectionReceiver powerConnectionReceiver = new PowerConnectionReceiver();
-        powerConnectionReceiver.onReceive(getApplicationContext(), batteryStatus);
-
-        registerReceiver(powerConnectionReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-*/
         //Initialize WorkManager variables:
         Constraints constraints = new Constraints.Builder()
                 .setRequiresBatteryNotLow(true)

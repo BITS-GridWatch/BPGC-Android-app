@@ -2,7 +2,6 @@ package com.macbitsgoa.bitsgridwatch;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -21,29 +20,22 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.model.MapStyleOptions;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.macbitsgoa.bitsgridwatch.rankings.RankingsActivity;
 
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
-
-import org.w3c.dom.Text;
 
 import static android.content.Context.MODE_PRIVATE;
 
 public class SettingsFragment extends Fragment {
 
-    private TextView usernameTextView, username_field, allow_monitoring, theme_select;
+    private TextView usernameTextView, username_field, allow_monitoring, theme_select, rankingButton;
     private SharedPreferences.Editor editor;
 
     private String TAG = "Settings Fragment";
@@ -67,6 +59,7 @@ public class SettingsFragment extends Fragment {
         username_field = view.findViewById(R.id.textview_username);
         allow_monitoring = view.findViewById(R.id.allow_monitoring);
         theme_select = view.findViewById(R.id.theme_select);
+        rankingButton = view.findViewById(R.id.rankings);
         Button signOutButton = view.findViewById(R.id.button_signout_settings);
         Button signInButton = view.findViewById(R.id.button_signin_settings);
         allowSwitch = view.findViewById(R.id.switch_monitor_settings);
@@ -77,47 +70,43 @@ public class SettingsFragment extends Fragment {
         theme_shared_preferences = Objects.requireNonNull(getActivity()).getSharedPreferences("ThemeOptions", MODE_PRIVATE);
         theme_editor = theme_shared_preferences.edit();
 
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!((MainActivity) Objects.requireNonNull(getActivity())).getSignedInStatus()) {
-                    ((MainActivity) getActivity()).userSignIn();
-                    updateUser();
-                } else
-                    Toast.makeText(getContext(), "Already Signed In!", Toast.LENGTH_SHORT).show();
-            }
-        });
-        signOutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MainActivity) Objects.requireNonNull(getActivity())).userSignOut();
-                usernameTextView.setText(R.string.guest);
-            }
+        rankingButton.setOnClickListener(view16 -> {
+            Intent rankIntent = new Intent(getContext(), RankingsActivity.class);
+            getContext().startActivity(rankIntent);
         });
 
-        allowSwitch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "entered onClick allowSwitch");
-                boolean switchState = allowSwitch.isChecked();
-                //editor.clear();
+        signInButton.setOnClickListener(v -> {
+            if (!((MainActivity) Objects.requireNonNull(getActivity())).getSignedInStatus()) {
+                ((MainActivity) getActivity()).userSignIn();
+                updateUser();
+            } else
+                Toast.makeText(getContext(), "Already Signed In!", Toast.LENGTH_SHORT).show();
+        });
+        signOutButton.setOnClickListener(v -> {
+            ((MainActivity) Objects.requireNonNull(getActivity())).userSignOut();
+            usernameTextView.setText(R.string.guest);
+        });
 
-                if (switchState) {
-                    Log.d(TAG, "allowSwitch = TRUE");
-                    //Display dialog box to check if verified.
-                    //Start background work only if user accepts.
-                    //Reset to false state if user declines.
-                    ((MainActivity) Objects.requireNonNull(getActivity())).setAllowMonitoring(true);
-                    ((MainActivity) Objects.requireNonNull(getActivity())).startBackgroundWork();
-                    updateAllowSwitchState();
-                    //launchAllowMonitoringDialog();
-                } else {
-                    Log.d(TAG, "allowSwitch = FALSE");
-                    ((MainActivity) Objects.requireNonNull(getActivity())).setAllowMonitoring(false);
-                    ((MainActivity) Objects.requireNonNull(getActivity())).cancelBackgroundWork();
-                }
-                //Log.d(TAG, "Updating switch state");
+        allowSwitch.setOnClickListener(v -> {
+            Log.d(TAG, "entered onClick allowSwitch");
+            boolean switchState = allowSwitch.isChecked();
+            //editor.clear();
+
+            if (switchState) {
+                Log.d(TAG, "allowSwitch = TRUE");
+                //Display dialog box to check if verified.
+                //Start background work only if user accepts.
+                //Reset to false state if user declines.
+                ((MainActivity) Objects.requireNonNull(getActivity())).setAllowMonitoring(true);
+                ((MainActivity) Objects.requireNonNull(getActivity())).startBackgroundWork();
+                updateAllowSwitchState();
+                //launchAllowMonitoringDialog();
+            } else {
+                Log.d(TAG, "allowSwitch = FALSE");
+                ((MainActivity) Objects.requireNonNull(getActivity())).setAllowMonitoring(false);
+                ((MainActivity) Objects.requireNonNull(getActivity())).cancelBackgroundWork();
             }
+            //Log.d(TAG, "Updating switch state");
         });
 
         boolean switchState = sharedPreferences.getBoolean("allow", true);
@@ -146,19 +135,19 @@ public class SettingsFragment extends Fragment {
 
                 LinearLayout alert_dialog_layout = new LinearLayout(getContext());
                 alert_dialog_layout.setOrientation(LinearLayout.VERTICAL);
-                alert_dialog_layout.setPadding(20,20,20,20);
+                alert_dialog_layout.setPadding(20, 20, 20, 20);
 
                 TextView alert_dialog_title = new TextView(alert_dialog_layout.getContext());
                 alert_dialog_title.setText("Choose theme");
                 alert_dialog_title.setTextSize(25);
-                alert_dialog_title.setPadding(40,20,20,20);
+                alert_dialog_title.setPadding(40, 20, 20, 20);
 
                 Typeface typeface_medium = getResources().getFont(R.font.montserrat_medium);
                 alert_dialog_title.setTypeface(typeface_medium);
 
                 RadioGroup radioGroup = new RadioGroup(alert_dialog_layout.getContext());
                 radioGroup.setOrientation(RadioGroup.VERTICAL);
-                radioGroup.setPadding(20,20,20,40);
+                radioGroup.setPadding(20, 20, 20, 40);
 
                 RadioButton radio_button_light = new RadioButton(alert_dialog_layout.getContext());
                 RadioButton radio_button_dark = new RadioButton(alert_dialog_layout.getContext());
@@ -177,35 +166,26 @@ public class SettingsFragment extends Fragment {
                 radio_button_dark.setTypeface(typeface_regular);
                 radio_button_set_by_battery_saver.setTypeface(typeface_regular);
 
-                radio_button_light.setPadding(20,20,20,20);
-                radio_button_dark.setPadding(20,20,20,20);
-                radio_button_set_by_battery_saver.setPadding(20,20,20,20);
+                radio_button_light.setPadding(20, 20, 20, 20);
+                radio_button_dark.setPadding(20, 20, 20, 20);
+                radio_button_set_by_battery_saver.setPadding(20, 20, 20, 20);
 
                 radioGroup.addView(radio_button_light);
                 radioGroup.addView(radio_button_dark);
                 radioGroup.addView(radio_button_set_by_battery_saver);
 
-                if (theme == AppCompatDelegate.MODE_NIGHT_NO)
-                {
+                if (theme == AppCompatDelegate.MODE_NIGHT_NO) {
                     alert_dialog_layout.setBackgroundColor(getResources().getColor(R.color.white));
                     alert_dialog_title.setTextColor(getResources().getColor(R.color.black));
-                }
-                else if (theme == AppCompatDelegate.MODE_NIGHT_YES)
-                {
+                } else if (theme == AppCompatDelegate.MODE_NIGHT_YES) {
                     alert_dialog_layout.setBackgroundColor(getResources().getColor(R.color.tv_back));
                     alert_dialog_title.setTextColor(getResources().getColor(R.color.white));
-                }
-                else
-                {
+                } else {
                     PowerManager powerManager = (PowerManager) getActivity().getSystemService(Context.POWER_SERVICE);
-                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-                            && powerManager.isPowerSaveMode())
-                    {
+                    if (powerManager.isPowerSaveMode()) {
                         alert_dialog_layout.setBackgroundColor(getResources().getColor(R.color.tv_back));
                         alert_dialog_title.setTextColor(getResources().getColor(R.color.white));
-                    }
-                    else
-                    {
+                    } else {
                         alert_dialog_title.setTextColor(getResources().getColor(R.color.black));
                     }
                 }
@@ -228,45 +208,33 @@ public class SettingsFragment extends Fragment {
 
                 AlertDialog finalAlertDialog = alertDialog;
 
-                radio_button_light.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                radio_button_light.setOnClickListener(view17 -> {
 
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                        theme_editor.putInt("Theme", AppCompatDelegate.MODE_NIGHT_NO);
-                        theme_editor.apply();
-                        finalAlertDialog.dismiss();
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    theme_editor.putInt("Theme", AppCompatDelegate.MODE_NIGHT_NO);
+                    theme_editor.apply();
+                    finalAlertDialog.dismiss();
 
-                    }
                 });
 
-                radio_button_dark.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                radio_button_dark.setOnClickListener(view1 -> {
 
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                        theme_editor.putInt("Theme", AppCompatDelegate.MODE_NIGHT_YES);
-                        theme_editor.apply();
-                        finalAlertDialog.dismiss();
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    theme_editor.putInt("Theme", AppCompatDelegate.MODE_NIGHT_YES);
+                    theme_editor.apply();
+                    finalAlertDialog.dismiss();
 
-                    }
                 });
 
 
-                radio_button_set_by_battery_saver.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                radio_button_set_by_battery_saver.setOnClickListener(view12 -> {
 
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
-                        theme_editor.putInt("Theme", AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
-                        theme_editor.apply();
-                        finalAlertDialog.dismiss();
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
+                    theme_editor.putInt("Theme", AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
+                    theme_editor.apply();
+                    finalAlertDialog.dismiss();
 
-                    }
                 });
-
-
-
 
 
 //                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -314,9 +282,6 @@ public class SettingsFragment extends Fragment {
 //                alertDialog.show();
 
 
-
-
-
             }
         });
 
@@ -325,35 +290,26 @@ public class SettingsFragment extends Fragment {
 
         TextView help_option = view.findViewById(R.id.help_option);
 
-        help_option.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        help_option.setOnClickListener(view13 -> {
 
-                Intent mainIntent = new Intent(getContext(), OnboardingActivity.class);
-                getContext().startActivity(mainIntent);
-            }
+            Intent mainIntent = new Intent(getContext(), OnboardingActivity.class);
+            getContext().startActivity(mainIntent);
         });
 
         TextView about_option = view.findViewById(R.id.about_option);
 
-        about_option.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        about_option.setOnClickListener(view14 -> {
 
-                Intent mainIntent = new Intent(getContext(),AboutActivity.class);
-                getContext().startActivity(mainIntent);
-            }
+            Intent mainIntent = new Intent(getContext(), AboutActivity.class);
+            getContext().startActivity(mainIntent);
         });
 
         TextView feedback_option = view.findViewById(R.id.feedback_option);
 
-        feedback_option.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        feedback_option.setOnClickListener(view15 -> {
 
-                Intent intent = new Intent(getContext(), FeedbackActivity.class);
-                getContext().startActivity(intent);
-            }
+            Intent intent = new Intent(getContext(), FeedbackActivity.class);
+            getContext().startActivity(intent);
         });
 
         //set font
@@ -363,6 +319,7 @@ public class SettingsFragment extends Fragment {
         allow_monitoring.setTypeface(typeface_regular);
         theme_select.setTypeface(typeface_regular);
         help_option.setTypeface(typeface_regular);
+        rankingButton.setTypeface(typeface_regular);
         feedback_option.setTypeface(typeface_regular);
         about_option.setTypeface(typeface_regular);
         signInButton.setTypeface(typeface_regular);
