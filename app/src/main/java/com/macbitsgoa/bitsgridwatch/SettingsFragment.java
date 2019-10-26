@@ -102,6 +102,7 @@ public class SettingsFragment extends Fragment {
                 updateAllowSwitchState();
                 //launchAllowMonitoringDialog();
             } else {
+                updateAllowSwitchState();
                 Log.d(TAG, "allowSwitch = FALSE");
                 ((MainActivity) Objects.requireNonNull(getActivity())).setAllowMonitoring(false);
                 ((MainActivity) Objects.requireNonNull(getActivity())).cancelBackgroundWork();

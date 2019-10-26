@@ -97,113 +97,118 @@ public class HomeFragment extends Fragment {
         thresholdTime = 60;
         mMapView.onResume(); // needed to get the map to display immediately
 
+        SharedPreferences sharedPreferences = Objects.requireNonNull(getContext()).getSharedPreferences("AllowMoniSharedPref", MODE_PRIVATE);
+        boolean switchState = sharedPreferences.getBoolean("allow", true);
+
         try {
             MapsInitializer.initialize(Objects.requireNonNull(getActivity()).getApplicationContext());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        mMapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap mMap) {
-                googleMap = mMap;
+        mMapView.getMapAsync(mMap -> {
+            googleMap = mMap;
 
 
-                //set theme
-                PowerManager powerManager = (PowerManager) Objects.requireNonNull(getActivity()).getSystemService(Context.POWER_SERVICE);
+            //set theme
+            PowerManager powerManager = (PowerManager) Objects.requireNonNull(getActivity()).getSystemService(Context.POWER_SERVICE);
 
-                theme_shared_preferences = getActivity().getSharedPreferences("ThemeOptions", MODE_PRIVATE);
-                int theme = theme_shared_preferences.getInt("Theme", AppCompatDelegate.MODE_NIGHT_NO);
+            theme_shared_preferences = getActivity().getSharedPreferences("ThemeOptions", MODE_PRIVATE);
+            int theme = theme_shared_preferences.getInt("Theme", AppCompatDelegate.MODE_NIGHT_NO);
 
-                if (theme == AppCompatDelegate.MODE_NIGHT_YES || (theme == AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY && powerManager.isPowerSaveMode())) {
-                    googleMap.setMapStyle(new MapStyleOptions(getResources().getString(R.string.map_style_json)));
-                }
+            if (theme == AppCompatDelegate.MODE_NIGHT_YES || (theme == AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY && powerManager.isPowerSaveMode())) {
+                googleMap.setMapStyle(new MapStyleOptions(getResources().getString(R.string.map_style_json)));
+            }
 
 
-                // For showing a move to my location button
-                if (Objects.requireNonNull(getContext()).checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED
-                        && getContext().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                            Manifest.permission.READ_CONTACTS)) {
-                        Toast.makeText(getContext(), "please provide the permission",
-                                Toast.LENGTH_SHORT).show();
-                        // Show an explanation to the user *asynchronously* -- don't block
-                        // this thread waiting for the user's response! After the user
-                        // sees the explanation, try again to request the permission.
-                    } else {
-                        // No explanation needed; request the permission
-                        ActivityCompat.requestPermissions(getActivity(),
-                                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-
-                        // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                        // app-defined int constant. The callback method gets the
-                        // result of the request.
-                    }
-                    //    Activity#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for Activity#requestPermissions for more details.
-                    return;
+            // For showing a move to my location button
+            if (Objects.requireNonNull(getContext()).checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED
+                    && getContext().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                        Manifest.permission.READ_CONTACTS)) {
+                    Toast.makeText(getContext(), "please provide the permission",
+                            Toast.LENGTH_SHORT).show();
+                    // Show an explanation to the user *asynchronously* -- don't block
+                    // this thread waiting for the user's response! After the user
+                    // sees the explanation, try again to request the permission.
                 } else {
-                    // Permission has already been granted
-                    googleMap.setMyLocationEnabled(true);
+                    // No explanation needed; request the permission
+                    ActivityCompat.requestPermissions(getActivity(),
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+
+                    // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                    // app-defined int constant. The callback method gets the
+                    // result of the request.
                 }
+                //    Activity#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for Activity#requestPermissions for more details.
+                return;
+            } else {
+                // Permission has already been granted
+                googleMap.setMyLocationEnabled(true);
+            }
 
-                /*check if location is enabled or not*/
+            /*check if location is enabled or not*/
 
-                LocationRequest locationRequest = LocationRequest.create();
-                locationRequest.setInterval(10000);
-                locationRequest.setFastestInterval(5000);
-                locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+            LocationRequest locationRequest = LocationRequest.create();
+            locationRequest.setInterval(10000);
+            locationRequest.setFastestInterval(5000);
+            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-                LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                        .addLocationRequest(locationRequest);
+            LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                    .addLocationRequest(locationRequest);
 
-                SettingsClient client = LocationServices.getSettingsClient(getActivity());
-                Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
+            SettingsClient client = LocationServices.getSettingsClient(getActivity());
+            Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
 
-                task.addOnSuccessListener(getActivity(), new OnSuccessListener<LocationSettingsResponse>() {
-                    @Override
-                    public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
-                        // All location settings are satisfied. The client can initialize
-                        // location requests here.
-                        // ...
-                    }
-                });
+            task.addOnSuccessListener(getActivity(), new OnSuccessListener<LocationSettingsResponse>() {
+                @Override
+                public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                    // All location settings are satisfied. The client can initialize
+                    // location requests here.
+                    // ...
+                }
+            });
 
-                task.addOnFailureListener(getActivity(), new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        if (e instanceof ResolvableApiException) {
-                            // Location settings are not satisfied, but this can be fixed
-                            // by showing the user a dialog.
-                            try {
-                                // Show the dialog by calling startResolutionForResult(),
-                                // and check the result in onActivityResult().
-                                ResolvableApiException resolvable = (ResolvableApiException) e;
-                                resolvable.startResolutionForResult(getActivity(),
-                                        0);
-                            } catch (IntentSender.SendIntentException sendEx) {
-                                // Ignore the error.
-                            }
+            task.addOnFailureListener(getActivity(), new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    if (e instanceof ResolvableApiException) {
+                        // Location settings are not satisfied, but this can be fixed
+                        // by showing the user a dialog.
+                        try {
+                            // Show the dialog by calling startResolutionForResult(),
+                            // and check the result in onActivityResult().
+                            ResolvableApiException resolvable = (ResolvableApiException) e;
+                            resolvable.startResolutionForResult(getActivity(),
+                                    0);
+                        } catch (IntentSender.SendIntentException sendEx) {
+                            // Ignore the error.
                         }
                     }
-                });
+                }
+            });
 
-                googleMap.setMyLocationEnabled(true);
+            googleMap.setMyLocationEnabled(true);
 
+
+            if (switchState) {
                 mapData(googleMap);
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centre, 0));
-                // For zooming automatically to the location of the marker
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(centre)
-                        .zoom(16f).tilt(10).build();
-                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            } else {
+                Toast.makeText(getContext(), "Allow Monitoring to view results", Toast.LENGTH_LONG).show();
             }
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centre, 0));
+            // For zooming automatically to the location of the marker
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(centre)
+                    .zoom(16f).tilt(10).build();
+            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         });
 
         fabSettings();
@@ -213,18 +218,21 @@ public class HomeFragment extends Fragment {
 
     private void fabSettings() {
         floatingActionsMenu.setEnabled(true);
+        SharedPreferences sharedPreferences = Objects.requireNonNull(getContext()).getSharedPreferences("AllowMoniSharedPref", MODE_PRIVATE);
+        boolean switchState = sharedPreferences.getBoolean("allow", true);
 
         fabA.setTitle("power supply in the last 5 mins");
-        fabA.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        fabA.setOnClickListener(view -> {
 
-                Log.e("HomeFragment", "fab5" + thresholdTime);
-                thresholdTime = 5;
-                googleMap.clear();
+            Log.e("HomeFragment", "fab5" + thresholdTime);
+            thresholdTime = 5;
+            googleMap.clear();
+            if (switchState) {
                 mapData(googleMap);
-
+            } else {
+                Toast.makeText(getContext(), "Allow Monitoring to view results", Toast.LENGTH_LONG).show();
             }
+
         });
         fabB.setTitle("power supply in the last 1 hour");
         fabB.setOnClickListener(new View.OnClickListener() {
@@ -234,7 +242,11 @@ public class HomeFragment extends Fragment {
                 Log.e("HomeFragment", "fab60" + thresholdTime);
                 thresholdTime = 60;
                 googleMap.clear();
-                mapData(googleMap);
+                if (switchState) {
+                    mapData(googleMap);
+                } else {
+                    Toast.makeText(getContext(), "Allow Monitoring to view results", Toast.LENGTH_LONG).show();
+                }
 
             }
         });
