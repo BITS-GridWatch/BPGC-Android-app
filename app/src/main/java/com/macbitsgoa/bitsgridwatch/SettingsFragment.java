@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -35,8 +36,11 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class SettingsFragment extends Fragment {
 
-    private TextView usernameTextView, username_field, allow_monitoring, theme_select, rankingButton;
+    private TextView usernameTextView, username_field, allow_monitoring, allow_monitoring_display, theme_select, rankingButton, rankings_display,
+                theme_display;
     private SharedPreferences.Editor editor;
+
+    private ImageView allow_monitoring_image, rankings_image, theme_image, help_image, feedback_image, about_image;
 
     private String TAG = "Settings Fragment";
 
@@ -65,6 +69,15 @@ public class SettingsFragment extends Fragment {
         allowSwitch = view.findViewById(R.id.switch_monitor_settings);
         SharedPreferences sharedPreferences = Objects.requireNonNull(getContext()).getSharedPreferences("AllowMoniSharedPref", MODE_PRIVATE);
         editor = sharedPreferences.edit();
+        allow_monitoring_image = view.findViewById(R.id.allow_monitoring_image);
+        allow_monitoring_display = view.findViewById(R.id.allow_monitoring_display);
+        rankings_image = view.findViewById(R.id.rankings_image);
+        rankings_display = view.findViewById(R.id.rankings_display);
+        theme_image = view.findViewById(R.id.theme_image);
+        theme_display = view.findViewById(R.id.theme_display);
+        help_image = view.findViewById(R.id.help_image);
+        feedback_image = view.findViewById(R.id.feedback_image);
+        about_image = view.findViewById(R.id.about_image);
 
         //shared preferences for theme
         theme_shared_preferences = Objects.requireNonNull(getActivity()).getSharedPreferences("ThemeOptions", MODE_PRIVATE);
@@ -100,12 +113,15 @@ public class SettingsFragment extends Fragment {
                 ((MainActivity) Objects.requireNonNull(getActivity())).setAllowMonitoring(true);
                 ((MainActivity) Objects.requireNonNull(getActivity())).startBackgroundWork();
                 updateAllowSwitchState();
+                allow_monitoring_display.setText("Monitoring enabled");
                 //launchAllowMonitoringDialog();
             } else {
                 updateAllowSwitchState();
                 Log.d(TAG, "allowSwitch = FALSE");
                 ((MainActivity) Objects.requireNonNull(getActivity())).setAllowMonitoring(false);
                 ((MainActivity) Objects.requireNonNull(getActivity())).cancelBackgroundWork();
+                updateAllowSwitchState();
+                allow_monitoring_display.setText("Monitoring disabled");
             }
             //Log.d(TAG, "Updating switch state");
         });
@@ -119,13 +135,21 @@ public class SettingsFragment extends Fragment {
 
         CharSequence[] app_themes = {"Light", "Dark", "Set by Batter Saver"};
 
+        int theme = theme_shared_preferences.getInt("Theme", AppCompatDelegate.MODE_NIGHT_NO);
+
+        if (theme == AppCompatDelegate.MODE_NIGHT_NO)
+            theme_display.setText("Light");
+        else if (theme == AppCompatDelegate.MODE_NIGHT_YES)
+            theme_display.setText("Dark");
+        else if (theme == AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY)
+            theme_display.setText("Set by Battery Saver");
+
         theme_select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
 //                AlertDialog alertDialog = null;
 
-                int theme = theme_shared_preferences.getInt("Theme", AppCompatDelegate.MODE_NIGHT_NO);
 
                 int checked_item = 0;
 
@@ -215,6 +239,7 @@ public class SettingsFragment extends Fragment {
                     theme_editor.putInt("Theme", AppCompatDelegate.MODE_NIGHT_NO);
                     theme_editor.apply();
                     finalAlertDialog.dismiss();
+                    theme_display.setText("Light");
 
                 });
 
@@ -224,6 +249,7 @@ public class SettingsFragment extends Fragment {
                     theme_editor.putInt("Theme", AppCompatDelegate.MODE_NIGHT_YES);
                     theme_editor.apply();
                     finalAlertDialog.dismiss();
+                    theme_display.setText("Dark");
 
                 });
 
@@ -234,6 +260,7 @@ public class SettingsFragment extends Fragment {
                     theme_editor.putInt("Theme", AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
                     theme_editor.apply();
                     finalAlertDialog.dismiss();
+                    theme_display.setText("Set by Batter Saver");
 
                 });
 
@@ -313,18 +340,27 @@ public class SettingsFragment extends Fragment {
             getContext().startActivity(intent);
         });
 
-        //set font
-        Typeface typeface_regular = getResources().getFont(R.font.montserrat_regular);
-        usernameTextView.setTypeface(typeface_regular);
-        username_field.setTypeface(typeface_regular);
-        allow_monitoring.setTypeface(typeface_regular);
-        theme_select.setTypeface(typeface_regular);
-        help_option.setTypeface(typeface_regular);
-        rankingButton.setTypeface(typeface_regular);
-        feedback_option.setTypeface(typeface_regular);
-        about_option.setTypeface(typeface_regular);
-        signInButton.setTypeface(typeface_regular);
-        signOutButton.setTypeface(typeface_regular);
+        if (allowSwitch.isChecked())
+            allow_monitoring_display.setText("Monitoring enabled");
+        else
+            allow_monitoring_display.setText("Monitoring disabled");
+
+        allow_monitoring.setOnClickListener(view18 -> allowSwitch.performClick());
+        allow_monitoring_image.setOnClickListener(view19 -> allowSwitch.performClick());
+        allow_monitoring_display.setOnClickListener(view110 -> allowSwitch.performClick());
+
+        rankings_image.setOnClickListener(view111 -> rankingButton.performClick());
+        rankings_display.setOnClickListener(view112 -> rankingButton.performClick());
+
+        theme_image.setOnClickListener(view113 -> theme_select.performClick());
+        theme_display.setOnClickListener(view114 -> theme_select.performClick());
+
+        help_image.setOnClickListener(view115 -> help_option.performClick());
+
+        feedback_image.setOnClickListener(view116 -> feedback_option.performClick());
+
+        about_image.setOnClickListener(view117 -> about_option.performClick());
+
 
         return view;
     }

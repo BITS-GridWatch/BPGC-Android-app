@@ -20,6 +20,7 @@
             android:layout_marginEnd="20dp">
 
             <ImageView
+                android:id="@+id/username_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/icon_account"
@@ -27,7 +28,7 @@
                 android:tint="@color/colorAccent"/>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginStart="20dp">
@@ -36,12 +37,14 @@
                 android:id="@+id/textview_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/username" />
+                android:text="@string/username"
+                android:fontFamily="@font/montserrat_medium"/>
 
             <TextView
                 android:id="@+id/textview_username_settings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_regular"
                 />
 
             </LinearLayout>
@@ -62,6 +65,7 @@
             android:layout_marginEnd="20dp">
 
             <ImageView
+                android:id="@+id/allow_monitoring_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/icon_monitoring"
@@ -78,14 +82,17 @@
 
                 <TextView
                     android:id="@+id/allow_monitoring"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/monitor" />
+                    android:text="@string/monitor"
+                    android:fontFamily="@font/montserrat_medium"/>
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/allow_monitoring_display"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Enabled/Disabled"/>
+                    android:text="Enabled/Disabled"
+                    android:fontFamily="@font/montserrat_regular"/>
 
             </LinearLayout>
 
@@ -94,6 +101,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:layout_weight="1"
                 android:layout_gravity="center"
                 android:checked="true" />
@@ -113,6 +122,7 @@
             android:layout_marginEnd="20dp">
 
             <ImageView
+                android:id="@+id/rankings_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/icon_rankings"
@@ -120,7 +130,7 @@
                 android:tint="@color/colorAccent"/>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginStart="20dp">
@@ -128,15 +138,18 @@
 
             <TextView
                 android:id="@+id/rankings"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Rankings" />
+                android:text="Rankings"
+                android:fontFamily="@font/montserrat_medium"/>
 
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/rankings_display"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Score"/>
+                    android:text="Your score, rankings list"
+                    android:fontFamily="@font/montserrat_regular"/>
 
 
             </LinearLayout>
@@ -157,6 +170,7 @@
 
 
             <ImageView
+                android:id="@+id/theme_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/icon_theme"
@@ -164,7 +178,7 @@
                 android:tint="@color/colorAccent"/>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginStart="20dp">
@@ -174,12 +188,15 @@
                     android:id="@+id/theme_select"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Theme" />
+                    android:text="Theme"
+                    android:fontFamily="@font/montserrat_medium"/>
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/theme_display"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Light/Dark"/>
+                    android:text="Light/Dark"
+                    android:fontFamily="@font/montserrat_regular"/>
 
             </LinearLayout>
 
@@ -200,6 +217,7 @@
         android:layout_marginEnd="20dp">
 
         <ImageView
+            android:id="@+id/help_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/icon_help"
@@ -209,11 +227,12 @@
 
         <TextView
             android:id="@+id/help_option"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Help"
             android:layout_marginStart="20dp"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:fontFamily="@font/montserrat_medium"/>
 
 
     </LinearLayout>
@@ -232,6 +251,7 @@
         android:layout_marginEnd="20dp">
 
         <ImageView
+            android:id="@+id/feedback_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/icon_feedback"
@@ -240,11 +260,12 @@
 
         <TextView
             android:id="@+id/feedback_option"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_gravity="center"
-            android:text="Feedback" />
+            android:text="Feedback"
+            android:fontFamily="@font/montserrat_medium"/>
 
 
     </LinearLayout>
@@ -262,6 +283,7 @@
             android:layout_marginEnd="20dp">
 
             <ImageView
+                android:id="@+id/about_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/icon_about"
@@ -271,11 +293,12 @@
 
             <TextView
                 android:id="@+id/about_option"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_gravity="center"
-                android:text="About" />
+                android:text="About"
+                android:fontFamily="@font/montserrat_medium"/>
 
 
         </LinearLayout>
@@ -304,6 +327,7 @@
                 android:layout_marginEnd="10dp"
                 android:padding="20dp"
                 android:text="@string/signin"
+                android:fontFamily="@font/montserrat_regular"
                 style="@style/Widget.AppCompat.Button.Colored"/>
 
             <Button
@@ -316,6 +340,7 @@
                 android:layout_marginEnd="10dp"
                 android:padding="20dp"
                 android:text="@string/signout"
+                android:fontFamily="@font/montserrat_regular"
                 style="@style/Widget.AppCompat.Button.Colored"/>
 
 

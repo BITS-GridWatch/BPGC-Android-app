@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.macbitsgoa.bitsgridwatch.rankings.RankingsActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+<!--        Instructions begin-->
 
 
         <TextView
@@ -16,9 +23,14 @@
             android:layout_marginTop="15dp"
             android:fontFamily="@font/montserrat_regular"
             android:gravity="center"
-            android:textSize="12sp"
             android:text="Your rank is based on your score, which is directly affected by the amount of contribution you make by using the app. The more you contribute, the better your score."
             />
+
+<!--        Instructions end-->
+
+
+<!--        Your score begins-->
+
 
         <TextView
             android:id="@+id/your_score"
@@ -32,10 +44,14 @@
             android:textSize="20sp"
             android:fontFamily="@font/montserrat_medium"/>
 
+<!--        Your score ends-->
+
+<!--        Top 10 Ranking List begins-->
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/ranks_text"
@@ -70,5 +86,8 @@
 
     </androidx.recyclerview.widget.RecyclerView>
 
+<!--        Top 10 Ranking List ends-->
 
-</LinearLayout>
+    </LinearLayout>
+
+</ScrollView>
