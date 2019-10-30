@@ -1,12 +1,15 @@
 package com.macbitsgoa.bitsgridwatch;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class DisclaimerActivity extends AppCompatActivity {
@@ -14,10 +17,27 @@ public class DisclaimerActivity extends AppCompatActivity {
     private Button acceptButton;
     private Button declineButton;
 
+    private ActionBar actionBar;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_disclaimer);
+
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowCustomEnabled(true);
+
+        TextView app_title = new TextView(this);
+        app_title.setText("Privacy Policy");
+        app_title.setTextSize(20);
+
+        Typeface typeface_medium = getResources().getFont(R.font.montserrat_medium);
+
+        app_title.setTypeface(typeface_medium);
+
+        actionBar.setCustomView(app_title);
 
         SharedPreferences prefs = getSharedPreferences("AllowMoniSharedPref", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();

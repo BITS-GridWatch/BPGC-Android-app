@@ -7,33 +7,51 @@
     tools:context="com.macbitsgoa.bitsgridwatch.DisclaimerActivity"
     android:orientation="vertical">
 
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="4"
-        android:text="@string/disclaimer"
-        android:gravity="center_horizontal|bottom"
-        android:textAlignment="gravity"
-        android:textSize="30sp"
-        android:textColor="@color/black"/>
+        android:layout_height="wrap_content"
+        android:layout_weight="10">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="20"
-        android:textSize="20sp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/disclaimer"
+        android:textAlignment="center"
+        android:layout_margin="20dp"
+        android:textSize="25sp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/montserrat_medium"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="10"
+        android:textSize="15sp"
         android:text="@string/disclaimer_body"
-        android:padding="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         android:textAlignment="gravity"
         android:textColor="@color/black"
-        android:gravity="center_vertical|start"/>
+        android:gravity="start"
+        android:fontFamily="@font/montserrat_regular"/>
+
+        </LinearLayout>
+
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="end|center_vertical"
-        android:layout_weight="2"
+        android:gravity="end"
+        android:layout_weight="1"
         android:background="@color/black">
         <Button
             android:layout_width="wrap_content"
@@ -44,7 +62,8 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:textColor="@color/white"
-            android:background="#00000000"/>
+            android:background="#00000000"
+            android:fontFamily="@font/montserrat_regular"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -54,6 +73,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:textColor="@color/white"
-            android:background="#00000000"/>
+            android:background="#00000000"
+            android:fontFamily="@font/montserrat_regular"/>
     </LinearLayout>
 </LinearLayout>
