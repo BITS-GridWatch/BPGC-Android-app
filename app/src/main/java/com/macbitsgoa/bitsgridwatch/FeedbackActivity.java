@@ -56,8 +56,6 @@ public class FeedbackActivity extends AppCompatActivity {
         rating_bar.setNumStars(5);  //number of stars
         rating_bar.setStepSize(1);  //step size
 
-        rating_bar.setRating(3); //default rating
-
         rating_bar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
@@ -91,6 +89,13 @@ public class FeedbackActivity extends AppCompatActivity {
         submit_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                if (rating_bar.getRating() == 0)
+                {
+                    Toast toast = Toast.makeText(getApplicationContext(), "Please provide a rating.", Toast.LENGTH_SHORT);
+                    toast.show();
+                    return;
+                }
 
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference myRef = database.getReference();
