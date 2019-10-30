@@ -11,7 +11,8 @@
         android:layout_weight="1"
         android:gravity="center"
         android:padding="5dp"
-        android:text="1" />
+        android:text="1"
+        android:fontFamily="@font/montserrat_regular"/>
 
     <TextView
         android:id="@+id/score_tv"
@@ -20,7 +21,8 @@
         android:layout_weight="1"
         android:gravity="center"
         android:padding="5dp"
-        android:text="10" />
+        android:text="10"
+        android:fontFamily="@font/montserrat_regular"/>
 
 
 </LinearLayout>

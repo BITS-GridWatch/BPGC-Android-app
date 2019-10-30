@@ -1,10 +1,12 @@
 package com.macbitsgoa.bitsgridwatch.rankings;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -29,10 +31,29 @@ public class RankingsActivity extends AppCompatActivity {
     DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
     String uid = "guest";
 
+    private ActionBar actionBar;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rankings);
+
+
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowCustomEnabled(true);
+
+        TextView app_title = new TextView(this);
+        app_title.setText("Rankings");
+        app_title.setTextSize(20);
+
+        Typeface typeface_medium = getResources().getFont(R.font.montserrat_medium);
+
+        app_title.setTypeface(typeface_medium);
+
+        actionBar.setCustomView(app_title);
+
 
         scoreTv = findViewById(R.id.your_score);
         ranksRv = findViewById(R.id.rank_list_rv);
@@ -53,11 +74,14 @@ public class RankingsActivity extends AppCompatActivity {
                 if (!uid.equals("guest") && !uid.equals("debug") &&
                         dataSnapshot.child(uid).child("Score").getValue(Integer.class) != null) {
                     int score = dataSnapshot.child(uid).child("Score").getValue(Integer.class);
-                    scoreTv.setText(String.valueOf(score));
-                } else if (uid.equals("quest")) {
+                    scoreTv.setText("Your Score: " + String.valueOf(score));
+                    scoreTv.setTextSize(20);
+                } else if (uid.equals("guest")) {
                     scoreTv.setText("Score not available for guest user.");
+                    scoreTv.setTextSize(15);
                 } else {
-                    scoreTv.setText("0");
+                    scoreTv.setText("Your Score: " + "0");
+                    scoreTv.setTextSize(20);
                 }
             }
 
