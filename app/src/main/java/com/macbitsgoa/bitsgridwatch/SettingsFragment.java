@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
@@ -40,7 +42,7 @@ public class SettingsFragment extends Fragment {
                 theme_display;
     private SharedPreferences.Editor editor;
 
-    private ImageView allow_monitoring_image, rankings_image, theme_image, help_image, feedback_image, about_image;
+    private ImageView username_image, allow_monitoring_image, rankings_image, theme_image, help_image, feedback_image, about_image;
 
     private String TAG = "Settings Fragment";
 
@@ -82,6 +84,7 @@ public class SettingsFragment extends Fragment {
         help_image = view.findViewById(R.id.help_image);
         feedback_image = view.findViewById(R.id.feedback_image);
         about_image = view.findViewById(R.id.about_image);
+        username_image = view.findViewById(R.id.username_image);
 
         //shared preferences for theme
         theme_shared_preferences = Objects.requireNonNull(getActivity()).getSharedPreferences("ThemeOptions", MODE_PRIVATE);
@@ -370,6 +373,8 @@ public class SettingsFragment extends Fragment {
         feedback_image.setOnClickListener(view116 -> feedback_option.performClick());
 
         about_image.setOnClickListener(view117 -> about_option.performClick());
+
+
 
 
         return view;

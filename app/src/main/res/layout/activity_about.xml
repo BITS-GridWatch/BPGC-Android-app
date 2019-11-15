@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.macbitsgoa.bitsgridwatch.AboutActivity">
+    tools:context="com.macbitsgoa.bitsgridwatch.AboutActivity"
+    android:id="@+id/background_layout">
 
 
     <ImageView

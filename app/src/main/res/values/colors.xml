@@ -16,5 +16,6 @@
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="tv_back">#7d000000</color>
+    <color name="surface">#121212</color>
 
 </resources>
