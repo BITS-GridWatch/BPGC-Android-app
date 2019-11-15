@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
@@ -28,6 +29,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -49,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 434;
 
     private static PeriodicWorkRequest saveRequest;
+
+    //shared preferences for current fragment
+    private SharedPreferences current_fragment;
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -127,10 +132,15 @@ public class MainActivity extends AppCompatActivity {
         userAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
         signedInStatus = userAccount != null;
 
+
+
+
         BottomNavigationView bottomNav = findViewById(R.id.bottomnav_activity_main);
         FrameLayout frameLayout = findViewById(R.id.framelayout_activity_main);
 
-        bottomNav.setSelectedItemId(R.id.item_bottomnav_home);  //Set Home as default selected.
+
+
+
         bottomNav.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.item_bottomnav_settings:
@@ -149,6 +159,20 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        //current fragment
+        current_fragment = this.getSharedPreferences("current_fragment", MODE_PRIVATE);
+        int currentFragmentInt = current_fragment.getInt("fragment", 0);
+        if (currentFragmentInt == 1)
+        {
+            bottomNav.setSelectedItemId(R.id.item_bottomnav_settings);
+            Log.e("bottom nav item","settings");
+        }
+        else
+        {
+            bottomNav.setSelectedItemId(R.id.item_bottomnav_home);
+            Log.e("bottom nav item","home");
+        }
+
         //Initialize WorkManager variables:
         Constraints constraints = new Constraints.Builder()
                 .setRequiresBatteryNotLow(true)
@@ -159,8 +183,11 @@ public class MainActivity extends AppCompatActivity {
                 .setConstraints(constraints)
                 .build();
 
-        Toast.makeText(this, "Marks on Map show presence of power supply.",
-                Toast.LENGTH_SHORT).show();
+        if (currentFragmentInt == 0)
+        {
+            Toast.makeText(this, "Marks on Map show presence of power supply.",
+                    Toast.LENGTH_SHORT).show();
+        }
 
         SharedPreferences prefs = getSharedPreferences("AllowMoniSharedPref", MODE_PRIVATE);
         if (prefs.getBoolean("allow", true)) {
@@ -176,11 +203,35 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        //Manually displaying the first fragment - one time only
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        //transaction.replace(R.id.framelayout_activity_main, HomeFragment.newInstance());
-        transaction.replace(R.id.framelayout_activity_main, new HomeFragment());
-        transaction.commit();
+        //current fragment
+        current_fragment = this.getSharedPreferences("current_fragment", MODE_PRIVATE);
+        int currentFragmentInt = current_fragment.getInt("fragment", 0);
+        Log.e("fragment",currentFragmentInt + "");
+        if(currentFragmentInt == 1)
+        {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            //transaction.replace(R.id.framelayout_activity_main, HomeFragment.newInstance());
+            transaction.replace(R.id.framelayout_activity_main, new SettingsFragment());
+            transaction.commit();
+            Log.e("entered","settings");
+        }
+        else {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            //transaction.replace(R.id.framelayout_activity_main, HomeFragment.newInstance());
+            transaction.replace(R.id.framelayout_activity_main, new HomeFragment());
+            transaction.commit();
+            Log.e("entered","home");
+        }
+
+        //shared preferences for current fragment
+        SharedPreferences current_fragment;
+        SharedPreferences.Editor current_fragment_editor;
+
+        //shared preferences for current fragment
+        current_fragment = Objects.requireNonNull(this).getSharedPreferences("current_fragment", MODE_PRIVATE);
+        current_fragment_editor = current_fragment.edit();
+        current_fragment_editor.putInt("fragment", 0);
+        current_fragment_editor.apply();
 
         if (!signedInStatus) {
             userSignIn();

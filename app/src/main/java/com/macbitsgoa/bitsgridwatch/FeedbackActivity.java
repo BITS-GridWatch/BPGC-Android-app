@@ -2,8 +2,10 @@ package com.macbitsgoa.bitsgridwatch;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.InputType;
@@ -25,10 +27,15 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
 public class FeedbackActivity extends AppCompatActivity {
 
     private ActionBar actionBar;
+
+    //shared preferences for current fragment
+    private SharedPreferences current_fragment;
+    private SharedPreferences.Editor current_fragment_editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +59,14 @@ public class FeedbackActivity extends AppCompatActivity {
         app_title.setTypeface(typeface_medium);
 
         actionBar.setCustomView(app_title);
+
+        //shared preferences for current fragment
+        current_fragment = Objects.requireNonNull(this).getSharedPreferences("current_fragment", MODE_PRIVATE);
+        current_fragment_editor = current_fragment.edit();
+        current_fragment_editor.putInt("fragment", 1);
+        current_fragment_editor.apply();
+
+
 
         rating_bar.setNumStars(5);  //number of stars
         rating_bar.setStepSize(1);  //step size

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +24,7 @@ import com.macbitsgoa.bitsgridwatch.R;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 
 public class RankingsActivity extends AppCompatActivity {
 
@@ -33,6 +35,9 @@ public class RankingsActivity extends AppCompatActivity {
 
     private ActionBar actionBar;
 
+    //shared preferences for current fragment
+    private SharedPreferences current_fragment;
+    private SharedPreferences.Editor current_fragment_editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +58,13 @@ public class RankingsActivity extends AppCompatActivity {
         app_title.setTypeface(typeface_medium);
 
         actionBar.setCustomView(app_title);
+
+        //shared preferences for current fragment
+        current_fragment = Objects.requireNonNull(this).getSharedPreferences("current_fragment", MODE_PRIVATE);
+        current_fragment_editor = current_fragment.edit();
+        current_fragment_editor.putInt("fragment", 1);
+        current_fragment_editor.apply();
+
 
 
         scoreTv = findViewById(R.id.your_score);

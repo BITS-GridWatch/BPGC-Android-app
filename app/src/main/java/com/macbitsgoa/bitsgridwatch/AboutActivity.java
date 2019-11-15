@@ -4,6 +4,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
@@ -12,11 +13,17 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import java.util.Objects;
+
 public class AboutActivity extends AppCompatActivity {
 
     private ActionBar actionBar;
 
     TextView app_name, version_name, version_code, copyright_text;
+
+    //shared preferences for current fragment
+    private SharedPreferences current_fragment;
+    private SharedPreferences.Editor current_fragment_editor;
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -39,6 +46,12 @@ public class AboutActivity extends AppCompatActivity {
         app_title.setTypeface(typeface_medium);
 
         actionBar.setCustomView(app_title);
+
+        //shared preferences for current fragment
+        current_fragment = Objects.requireNonNull(this).getSharedPreferences("current_fragment", MODE_PRIVATE);
+        current_fragment_editor = current_fragment.edit();
+        current_fragment_editor.putInt("fragment", 1);
+        current_fragment_editor.apply();
 
         app_name = findViewById(R.id.app_name);
         version_name = findViewById(R.id.version_name);

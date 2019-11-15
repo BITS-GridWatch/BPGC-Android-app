@@ -50,6 +50,10 @@ public class SettingsFragment extends Fragment {
 
     private Switch allowSwitch;
 
+    //shared preferences for current fragment
+    private SharedPreferences current_fragment;
+    private SharedPreferences.Editor current_fragment_editor;
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Nullable
     @Override
@@ -149,6 +153,12 @@ public class SettingsFragment extends Fragment {
             public void onClick(View view) {
 
 //                AlertDialog alertDialog = null;
+
+                //shared preferences for current fragment
+                current_fragment = Objects.requireNonNull(getActivity()).getSharedPreferences("current_fragment", MODE_PRIVATE);
+                current_fragment_editor = current_fragment.edit();
+                current_fragment_editor.putInt("fragment", 1);
+                current_fragment_editor.apply();
 
 
                 int checked_item = 0;
