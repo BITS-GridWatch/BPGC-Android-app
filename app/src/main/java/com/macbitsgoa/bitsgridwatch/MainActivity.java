@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +30,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -145,10 +145,16 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.item_bottomnav_settings:
                     selectedFragment = SettingsFragment.newInstance();
+                    item.setIcon(R.drawable.icon_new_settings_fragment_selected);
+                    Menu menu = bottomNav.getMenu();
+                    menu.findItem(R.id.item_bottomnav_home).setIcon(R.drawable.icon_new_home_fragment_unselected);
                     break;
                 default:                                        //Open Home if nothing is selected somehow.
                     //selectedFragment = HomeFragment.newInstance();
                     selectedFragment = new HomeFragment();
+                    item.setIcon(R.drawable.icon_new_home_fragment_selected);
+                    Menu menu1 = bottomNav.getMenu();
+                    menu1.findItem(R.id.item_bottomnav_settings).setIcon(R.drawable.icon_new_settings_fragment_unselected);
                     break;
             }
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -203,6 +209,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        BottomNavigationView bottomNav = findViewById(R.id.bottomnav_activity_main);
+
         //current fragment
         current_fragment = this.getSharedPreferences("current_fragment", MODE_PRIVATE);
         int currentFragmentInt = current_fragment.getInt("fragment", 0);
@@ -214,6 +222,7 @@ public class MainActivity extends AppCompatActivity {
             transaction.replace(R.id.framelayout_activity_main, new SettingsFragment());
             transaction.commit();
             Log.e("entered","settings");
+            bottomNav.setSelectedItemId(R.id.item_bottomnav_settings);
         }
         else {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -221,6 +230,7 @@ public class MainActivity extends AppCompatActivity {
             transaction.replace(R.id.framelayout_activity_main, new HomeFragment());
             transaction.commit();
             Log.e("entered","home");
+            bottomNav.setSelectedItemId(R.id.item_bottomnav_home);
         }
 
         //shared preferences for current fragment

@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        app:itemIconTint="#88ffffff"
+        app:itemIconTint="#ffffff"
         app:itemTextColor="#ffffff"
         app:menu="@menu/menu_bottomnav_activity_main"
         android:theme="@style/BottomNavTheme"/>

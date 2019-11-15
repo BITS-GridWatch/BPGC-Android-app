@@ -4,14 +4,14 @@
     <item
         android:id="@+id/item_bottomnav_home"
         android:enabled="true"
-        android:icon="@drawable/home_icon"
+        android:icon="@drawable/icon_new_home_fragment_selected"
         android:iconTint="#ffffff"
         android:title="@string/bottomnav_home"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/item_bottomnav_settings"
         android:enabled="true"
-        android:icon="@drawable/settings_icon"
+        android:icon="@drawable/icon_new_settings_fragment_selected"
         android:iconTint="#ffffff"
         android:title="@string/bottomnav_settings"
         app:showAsAction="ifRoom" />
