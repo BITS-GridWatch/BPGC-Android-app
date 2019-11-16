@@ -39,10 +39,10 @@ import static android.content.Context.MODE_PRIVATE;
 public class SettingsFragment extends Fragment {
 
     private TextView usernameTextView, username_field, allow_monitoring, allow_monitoring_display, theme_select, rankingButton, rankings_display,
-                theme_display;
+                theme_display, invite_option;
     private SharedPreferences.Editor editor;
 
-    private ImageView username_image, allow_monitoring_image, rankings_image, theme_image, help_image, feedback_image, about_image;
+    private ImageView username_image, allow_monitoring_image, rankings_image, theme_image, help_image, feedback_image, invite_image, about_image;
 
     private String TAG = "Settings Fragment";
 
@@ -85,6 +85,8 @@ public class SettingsFragment extends Fragment {
         feedback_image = view.findViewById(R.id.feedback_image);
         about_image = view.findViewById(R.id.about_image);
         username_image = view.findViewById(R.id.username_image);
+        invite_image = view.findViewById(R.id.invite_image);
+        invite_option = view.findViewById(R.id.invite_option);
 
         //shared preferences for theme
         theme_shared_preferences = Objects.requireNonNull(getActivity()).getSharedPreferences("ThemeOptions", MODE_PRIVATE);
@@ -358,6 +360,25 @@ public class SettingsFragment extends Fragment {
         else
             allow_monitoring_display.setText("Monitoring disabled");
 
+
+        invite_option.setOnClickListener(view118 -> {
+
+            try {
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "My application name");
+                String shareMessage= "\nHey, check out UJALA, this app detects and logs power outages in BITS Goa!\n\n";
+                shareMessage = shareMessage + "https://play.google.com/store/apps/details?id=com.macbitsgoa.bitsgridwatch"  +"\n\n";
+                shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+                startActivity(Intent.createChooser(shareIntent, "Share with"));
+            } catch(Exception e) {
+
+                Log.e("share error", "exception caught");
+            }
+
+
+        });
+
         allow_monitoring.setOnClickListener(view18 -> allowSwitch.performClick());
         allow_monitoring_image.setOnClickListener(view19 -> allowSwitch.performClick());
         allow_monitoring_display.setOnClickListener(view110 -> allowSwitch.performClick());
@@ -374,7 +395,7 @@ public class SettingsFragment extends Fragment {
 
         about_image.setOnClickListener(view117 -> about_option.performClick());
 
-
+        invite_image.setOnClickListener(view119 -> invite_option.performClick());
 
 
         return view;

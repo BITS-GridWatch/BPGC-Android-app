@@ -272,7 +272,41 @@
 
 <!--        Option 6: Feedback ends-->
 
-<!--        Option 7: About begins-->
+<!--        Option 7: Invite a friend begins-->
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp">
+
+            <ImageView
+                android:id="@+id/invite_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_invite"
+                android:layout_gravity="center"
+                android:tint="@color/colorAccent"/>
+
+            <TextView
+                android:id="@+id/invite_option"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_gravity="center"
+                android:text="Invite a friend"
+                android:fontFamily="@font/montserrat_medium"/>
+
+
+        </LinearLayout>
+
+
+<!--        Option 7: Invite a friend ends-->
+
+        <!--        Option 8: About begins-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -304,7 +338,7 @@
         </LinearLayout>
 
 
-<!--        Option 7: About ends-->
+<!--        Option 8: About ends-->
 
 <!--        Sign-in and Sign-out buttons begin-->
 
