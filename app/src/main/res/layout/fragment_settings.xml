@@ -306,7 +306,44 @@
 
 <!--        Option 7: Invite a friend ends-->
 
-        <!--        Option 8: About begins-->
+
+
+
+        <!--        Option 8: Rate us begins-->
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp">
+
+            <ImageView
+                android:id="@+id/rate_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_rate"
+                android:layout_gravity="center"
+                android:tint="@color/colorAccent"/>
+
+            <TextView
+                android:id="@+id/rate_option"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_gravity="center"
+                android:text="Rate us"
+                android:fontFamily="@font/montserrat_medium"/>
+
+
+        </LinearLayout>
+
+
+        <!--        Option 8: Rate us ends-->
+
+        <!--        Option 9: About begins-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -338,7 +375,7 @@
         </LinearLayout>
 
 
-<!--        Option 8: About ends-->
+<!--        Option 9: About ends-->
 
 <!--        Sign-in and Sign-out buttons begin-->
 

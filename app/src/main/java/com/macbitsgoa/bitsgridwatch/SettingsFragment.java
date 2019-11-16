@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -34,15 +35,17 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
+import org.w3c.dom.Text;
+
 import static android.content.Context.MODE_PRIVATE;
 
 public class SettingsFragment extends Fragment {
 
     private TextView usernameTextView, username_field, allow_monitoring, allow_monitoring_display, theme_select, rankingButton, rankings_display,
-                theme_display, invite_option;
+                theme_display, invite_option, rate_option;
     private SharedPreferences.Editor editor;
 
-    private ImageView username_image, allow_monitoring_image, rankings_image, theme_image, help_image, feedback_image, invite_image, about_image;
+    private ImageView username_image, allow_monitoring_image, rankings_image, theme_image, help_image, feedback_image, invite_image, about_image, rate_image;
 
     private String TAG = "Settings Fragment";
 
@@ -87,6 +90,8 @@ public class SettingsFragment extends Fragment {
         username_image = view.findViewById(R.id.username_image);
         invite_image = view.findViewById(R.id.invite_image);
         invite_option = view.findViewById(R.id.invite_option);
+        rate_image = view.findViewById(R.id.rate_image);
+        rate_option = view.findViewById(R.id.rate_option);
 
         //shared preferences for theme
         theme_shared_preferences = Objects.requireNonNull(getActivity()).getSharedPreferences("ThemeOptions", MODE_PRIVATE);
@@ -218,12 +223,12 @@ public class SettingsFragment extends Fragment {
                     alert_dialog_layout.setBackgroundColor(getResources().getColor(R.color.white));
                     alert_dialog_title.setTextColor(getResources().getColor(R.color.black));
                 } else if (theme == AppCompatDelegate.MODE_NIGHT_YES) {
-                    alert_dialog_layout.setBackgroundColor(getResources().getColor(R.color.tv_back));
+                    alert_dialog_layout.setBackgroundColor(getResources().getColor(R.color.surface));
                     alert_dialog_title.setTextColor(getResources().getColor(R.color.white));
                 } else {
                     PowerManager powerManager = (PowerManager) getActivity().getSystemService(Context.POWER_SERVICE);
                     if (powerManager.isPowerSaveMode()) {
-                        alert_dialog_layout.setBackgroundColor(getResources().getColor(R.color.tv_back));
+                        alert_dialog_layout.setBackgroundColor(getResources().getColor(R.color.surface));
                         alert_dialog_title.setTextColor(getResources().getColor(R.color.white));
                     } else {
                         alert_dialog_title.setTextColor(getResources().getColor(R.color.black));
@@ -360,7 +365,7 @@ public class SettingsFragment extends Fragment {
         else
             allow_monitoring_display.setText("Monitoring disabled");
 
-
+        //invite a friend
         invite_option.setOnClickListener(view118 -> {
 
             try {
@@ -377,6 +382,131 @@ public class SettingsFragment extends Fragment {
             }
 
 
+        });
+
+        //rate us
+        rate_option.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                AlertDialog alertDialog = null;
+
+                LinearLayout alert_dialog_layout = new LinearLayout(getContext());
+                alert_dialog_layout.setOrientation(LinearLayout.VERTICAL);
+                alert_dialog_layout.setPadding(20, 20, 20, 20);
+
+                TextView alert_dialog_title = new TextView(alert_dialog_layout.getContext());
+                alert_dialog_title.setText("Rate us");
+                alert_dialog_title.setTextSize(25);
+                alert_dialog_title.setPadding(40, 20, 20, 20);
+
+                TextView alert_dialog_message = new TextView(alert_dialog_layout.getContext());
+                alert_dialog_message.setText("Like this app? Rate us Google Play Store!");
+                alert_dialog_message.setTextSize(15);
+                alert_dialog_message.setPadding(40,20,40,20);
+
+                LinearLayout button_layout = new LinearLayout(getContext());
+                button_layout.setOrientation(LinearLayout.HORIZONTAL);
+                button_layout.setPadding(20,20,20,20);
+                button_layout.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+
+                TextView positive_button = new TextView(button_layout.getContext());
+                positive_button.setText("YES, SURE!");
+                positive_button.setPadding(20,20,20,20);
+                positive_button.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
+                positive_button.setTextColor(getResources().getColor(R.color.colorPrimary));
+
+                TextView negative_button = new TextView(button_layout.getContext());
+                negative_button.setText("NO, THANKS.");
+                negative_button.setPadding(20,20,20,20);
+                negative_button.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
+
+
+                Typeface typeface_medium = getResources().getFont(R.font.montserrat_medium);
+                alert_dialog_title.setTypeface(typeface_medium);
+
+                Typeface typeface_regular = getResources().getFont(R.font.montserrat_regular);
+                alert_dialog_message.setTypeface(typeface_regular);
+                positive_button.setTypeface(typeface_medium);
+                negative_button.setTypeface(typeface_medium);
+
+                if (theme == AppCompatDelegate.MODE_NIGHT_NO)
+                {
+                    alert_dialog_title.setTextColor(getResources().getColor(R.color.black));
+                    alert_dialog_layout.setBackgroundColor(getResources().getColor(R.color.white));
+                    negative_button.setTextColor(getResources().getColor(R.color.black));
+                }
+                else if (theme == AppCompatDelegate.MODE_NIGHT_YES)
+                {
+                    alert_dialog_title.setTextColor(getResources().getColor(R.color.white));
+                    alert_dialog_layout.setBackgroundColor(getResources().getColor(R.color.surface));
+                    negative_button.setTextColor(getResources().getColor(R.color.white));
+                }
+                else
+                {
+                    PowerManager powerManager = (PowerManager) getActivity().getSystemService(Context.POWER_SERVICE);
+                    if (powerManager.isPowerSaveMode()) {
+                        alert_dialog_title.setTextColor(getResources().getColor(R.color.white));
+                        alert_dialog_layout.setBackgroundColor(getResources().getColor(R.color.surface));
+                        negative_button.setTextColor(getResources().getColor(R.color.white));
+                    } else {
+                        alert_dialog_title.setTextColor(getResources().getColor(R.color.black));
+                        alert_dialog_layout.setBackgroundColor(getResources().getColor(R.color.white));
+                        negative_button.setTextColor(getResources().getColor(R.color.black));
+                    }
+                }
+
+                button_layout.addView(positive_button);
+                button_layout.addView(negative_button);
+
+
+                alert_dialog_layout.addView(alert_dialog_title);
+                alert_dialog_layout.addView(alert_dialog_message);
+
+                alert_dialog_layout.addView(button_layout);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setView(alert_dialog_layout);
+                alertDialog = builder.create();
+                alertDialog.show();
+
+
+                AlertDialog finalAlertDialog = alertDialog;
+
+
+                positive_button.setOnClickListener(view120 -> {
+
+                    try
+                    {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.macbitsgoa.bitsgridwatch")));
+
+                        //shared preferences for current fragment
+                        current_fragment = Objects.requireNonNull(getActivity()).getSharedPreferences("current_fragment", MODE_PRIVATE);
+                        current_fragment_editor = current_fragment.edit();
+                        current_fragment_editor.putInt("fragment", 1);
+                        current_fragment_editor.apply();
+
+                    }
+                    catch (Exception e)
+                    {
+                        Log.e("rate us error", "exception caught");
+                    }
+                    finally {
+
+                        finalAlertDialog.dismiss();
+                    }
+                });
+
+                negative_button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        finalAlertDialog.dismiss();
+                    }
+                });
+
+
+            }
         });
 
         allow_monitoring.setOnClickListener(view18 -> allowSwitch.performClick());
@@ -397,6 +527,7 @@ public class SettingsFragment extends Fragment {
 
         invite_image.setOnClickListener(view119 -> invite_option.performClick());
 
+        rate_image.setOnClickListener(view121 -> rate_option.performClick());
 
         return view;
     }
