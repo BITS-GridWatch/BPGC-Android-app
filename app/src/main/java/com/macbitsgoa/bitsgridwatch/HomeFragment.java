@@ -33,6 +33,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
@@ -361,12 +362,47 @@ public class HomeFragment extends Fragment {
 
                                     Log.e("HomeFragment1", "record" + lat + " " + lon + " " + chargingState);
                                     if (chargingState != null && chargingState && lat != null && lon != null) {
-                                        // For dropping a marker at a point on the Map
+                                        // For dropping a marker at a point on the Map for AC by phones
                                         LatLng powerMarker = new LatLng(Double.parseDouble(lat),
                                                 Double.parseDouble(lon));
 
                                         googleMap.addMarker(new MarkerOptions().position(powerMarker)
                                                 .title("Power supply detected")
+                                                .snippet("at " + time.substring(0, 16) + ""))
+                                                .setIcon(BitmapDescriptorFactory
+                                                        .defaultMarker(BitmapDescriptorFactory
+                                                                .HUE_GREEN));
+                                        Log.e("HomeFragment1", "fab? " + thresholdTime + " diff " + diffMins + " " + time);
+                                        Log.e("HomeFragment1", "marked" + lat + " " + lon + " " + chargingState);
+                                    }
+                                } else if (type != null && type.equalsIgnoreCase("CCAC")) {
+                                    String lat = grandChild.child("Latitude").getValue(String.class);
+                                    String lon = grandChild.child("Longitude").getValue(String.class);
+                                    Boolean chargingState = grandChild.child("ChargingState")
+                                            .getValue(Boolean.class);
+
+                                    Log.e("HomeFragment1", "record" + lat + " " + lon + " " + chargingState);
+                                    if (chargingState != null && chargingState && lat != null && lon != null) {
+                                        // For dropping a marker at a point on the Map by CC node
+                                        LatLng powerMarker = new LatLng(Double.parseDouble(lat),
+                                                Double.parseDouble(lon));
+
+                                        googleMap.addMarker(new MarkerOptions().position(powerMarker)
+                                                .title("Power supply detected")
+                                                .snippet("at " + time.substring(0, 16) + ""))
+                                                .setIcon(BitmapDescriptorFactory
+                                                        .defaultMarker(BitmapDescriptorFactory
+                                                                .HUE_GREEN));
+
+                                        Log.e("HomeFragment1", "fab? " + thresholdTime + " diff " + diffMins + " " + time);
+                                        Log.e("HomeFragment1", "marked" + lat + " " + lon + " " + chargingState);
+                                    } else if (chargingState != null && !chargingState && lat != null && lon != null) {
+                                        // For dropping a marker at a point on the Map if charing not there
+                                        LatLng powerMarker = new LatLng(Double.parseDouble(lat),
+                                                Double.parseDouble(lon));
+
+                                        googleMap.addMarker(new MarkerOptions().position(powerMarker)
+                                                .title("Power supply missing")
                                                 .snippet("at " + time.substring(0, 16) + ""));
                                         Log.e("HomeFragment1", "fab? " + thresholdTime + " diff " + diffMins + " " + time);
                                         Log.e("HomeFragment1", "marked" + lat + " " + lon + " " + chargingState);

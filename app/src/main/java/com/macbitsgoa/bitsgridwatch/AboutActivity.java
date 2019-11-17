@@ -26,8 +26,6 @@ import java.util.Objects;
 
 public class AboutActivity extends AppCompatActivity {
 
-    private ActionBar actionBar;
-
     TextView app_name, version_name, version_code, copyright_text;
 
     //shared preferences for current fragment
@@ -44,7 +42,7 @@ public class AboutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
 
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayShowCustomEnabled(true);
 
