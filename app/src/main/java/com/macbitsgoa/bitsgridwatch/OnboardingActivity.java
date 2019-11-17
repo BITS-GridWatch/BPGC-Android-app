@@ -107,8 +107,6 @@ public class OnboardingActivity extends AppCompatActivity {
         }
 
 
-
-
         slide_pager = findViewById(R.id.slide_pager);
         dot_layout = findViewById(R.id.dot_layout);
 

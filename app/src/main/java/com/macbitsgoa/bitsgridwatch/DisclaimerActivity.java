@@ -104,7 +104,7 @@ public class DisclaimerActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("AllowMoniSharedPref", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
-        if(!prefs.getBoolean("first_time",true) && prefs.getBoolean("disclaimer",false)){
+        if (!prefs.getBoolean("first_time", true) && prefs.getBoolean("disclaimer", false)) {
             //User has already allowed earlier.
             //Open main activity
             Intent mainIntent = new Intent(DisclaimerActivity.this, MainActivity.class);
@@ -118,8 +118,8 @@ public class DisclaimerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Set some boolean
-                editor.putBoolean("disclaimer",true);
-                editor.putBoolean("first_time",false);
+                editor.putBoolean("disclaimer", true);
+                editor.putBoolean("first_time", false);
                 editor.apply();
                 Intent mainIntent = new Intent(DisclaimerActivity.this, MainActivity.class);
                 DisclaimerActivity.this.startActivity(mainIntent);
@@ -131,8 +131,8 @@ public class DisclaimerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(DisclaimerActivity.this, "You must Accept in order to proceed!", Toast.LENGTH_LONG).show();
-                editor.putBoolean("disclaimer",false);
-                editor.putBoolean("first_time",false);
+                editor.putBoolean("disclaimer", false);
+                editor.putBoolean("first_time", false);
                 editor.apply();
             }
         });

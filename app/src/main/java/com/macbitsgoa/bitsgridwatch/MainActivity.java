@@ -196,26 +196,23 @@ public class MainActivity extends AppCompatActivity {
         signedInStatus = userAccount != null;
 
 
-
-
         BottomNavigationView bottomNav = findViewById(R.id.bottomnav_activity_main);
         FrameLayout frameLayout = findViewById(R.id.framelayout_activity_main);
 
         // set bottom navigation menu background colour
 
-        int[][] states = new int[][] {
+        int[][] states = new int[][]{
 
 
-                new int[] {android.R.attr.state_checked}, // checked
-                new int[] {-android.R.attr.state_checked}  // unchecked
+                new int[]{android.R.attr.state_checked}, // checked
+                new int[]{-android.R.attr.state_checked}  // unchecked
         };
 
-        int[] colors = new int[] {
+        int[] colors = new int[]{
 
                 getResources().getColor(R.color.colorPrimary),
                 Color.GRAY
         };
-
 
 
         ColorStateList colorStateList = new ColorStateList(states, colors);
@@ -224,18 +221,13 @@ public class MainActivity extends AppCompatActivity {
         bottomNav.setItemIconTintList(colorStateList);
 
 
-        if (theme == AppCompatDelegate.MODE_NIGHT_NO)
-        {
+        if (theme == AppCompatDelegate.MODE_NIGHT_NO) {
             bottomNav.setBackgroundColor(getResources().getColor(R.color.white));
 
-        }
-        else if (theme == AppCompatDelegate.MODE_NIGHT_YES)
-        {
+        } else if (theme == AppCompatDelegate.MODE_NIGHT_YES) {
             bottomNav.setBackgroundColor(getResources().getColor(R.color.surface));
 
-        }
-        else
-        {
+        } else {
             PowerManager powerManager = (PowerManager) this.getSystemService(Context.POWER_SERVICE);
             if (powerManager.isPowerSaveMode()) {
                 bottomNav.setBackgroundColor(getResources().getColor(R.color.surface));
@@ -274,15 +266,12 @@ public class MainActivity extends AppCompatActivity {
         //current fragment
         current_fragment = this.getSharedPreferences("current_fragment", MODE_PRIVATE);
         int currentFragmentInt = current_fragment.getInt("fragment", 0);
-        if (currentFragmentInt == 1)
-        {
+        if (currentFragmentInt == 1) {
             bottomNav.setSelectedItemId(R.id.item_bottomnav_settings);
-            Log.e("bottom nav item","settings");
-        }
-        else
-        {
+            Log.e("bottom nav item", "settings");
+        } else {
             bottomNav.setSelectedItemId(R.id.item_bottomnav_home);
-            Log.e("bottom nav item","home");
+            Log.e("bottom nav item", "home");
         }
 
         //Initialize WorkManager variables:
@@ -295,8 +284,7 @@ public class MainActivity extends AppCompatActivity {
                 .setConstraints(constraints)
                 .build();
 
-        if (currentFragmentInt == 0)
-        {
+        if (currentFragmentInt == 0) {
             Toast.makeText(this, "Marks on Map show presence of power supply.",
                     Toast.LENGTH_SHORT).show();
         }
@@ -320,22 +308,20 @@ public class MainActivity extends AppCompatActivity {
         //current fragment
         current_fragment = this.getSharedPreferences("current_fragment", MODE_PRIVATE);
         int currentFragmentInt = current_fragment.getInt("fragment", 0);
-        Log.e("fragment",currentFragmentInt + "");
-        if(currentFragmentInt == 1)
-        {
+        Log.e("fragment", currentFragmentInt + "");
+        if (currentFragmentInt == 1) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             //transaction.replace(R.id.framelayout_activity_main, HomeFragment.newInstance());
             transaction.replace(R.id.framelayout_activity_main, new SettingsFragment());
             transaction.commit();
-            Log.e("entered","settings");
+            Log.e("entered", "settings");
             bottomNav.setSelectedItemId(R.id.item_bottomnav_settings);
-        }
-        else {
+        } else {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             //transaction.replace(R.id.framelayout_activity_main, HomeFragment.newInstance());
             transaction.replace(R.id.framelayout_activity_main, new HomeFragment());
             transaction.commit();
-            Log.e("entered","home");
+            Log.e("entered", "home");
             bottomNav.setSelectedItemId(R.id.item_bottomnav_home);
         }
 

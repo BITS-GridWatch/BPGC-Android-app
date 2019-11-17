@@ -42,7 +42,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class SettingsFragment extends Fragment {
 
     private TextView usernameTextView, username_field, allow_monitoring, allow_monitoring_display, theme_select, rankingButton, rankings_display,
-                theme_display, invite_option, rate_option;
+            theme_display, invite_option, rate_option;
     private SharedPreferences.Editor editor;
 
     private ImageView username_image, allow_monitoring_image, rankings_image, theme_image, help_image, feedback_image, invite_image, about_image, rate_image;
@@ -372,11 +372,11 @@ public class SettingsFragment extends Fragment {
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
                 shareIntent.putExtra(Intent.EXTRA_SUBJECT, "My application name");
-                String shareMessage= "\nHey, check out UJALA, this app detects and logs power outages in BITS Goa!\n\n";
-                shareMessage = shareMessage + "https://play.google.com/store/apps/details?id=com.macbitsgoa.bitsgridwatch"  +"\n\n";
+                String shareMessage = "\nHey, check out UJALA, this app detects and logs power outages in BITS Goa!\n\n";
+                shareMessage = shareMessage + "https://play.google.com/store/apps/details?id=com.macbitsgoa.bitsgridwatch" + "\n\n";
                 shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
                 startActivity(Intent.createChooser(shareIntent, "Share with"));
-            } catch(Exception e) {
+            } catch (Exception e) {
 
                 Log.e("share error", "exception caught");
             }
@@ -403,22 +403,22 @@ public class SettingsFragment extends Fragment {
                 TextView alert_dialog_message = new TextView(alert_dialog_layout.getContext());
                 alert_dialog_message.setText("Like this app? Rate us Google Play Store!");
                 alert_dialog_message.setTextSize(15);
-                alert_dialog_message.setPadding(40,20,40,20);
+                alert_dialog_message.setPadding(40, 20, 40, 20);
 
                 LinearLayout button_layout = new LinearLayout(getContext());
                 button_layout.setOrientation(LinearLayout.HORIZONTAL);
-                button_layout.setPadding(20,20,20,20);
+                button_layout.setPadding(20, 20, 20, 20);
                 button_layout.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
 
                 TextView positive_button = new TextView(button_layout.getContext());
                 positive_button.setText("YES, SURE!");
-                positive_button.setPadding(20,20,20,20);
+                positive_button.setPadding(20, 20, 20, 20);
                 positive_button.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
                 positive_button.setTextColor(getResources().getColor(R.color.colorPrimary));
 
                 TextView negative_button = new TextView(button_layout.getContext());
                 negative_button.setText("NO, THANKS.");
-                negative_button.setPadding(20,20,20,20);
+                negative_button.setPadding(20, 20, 20, 20);
                 negative_button.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
 
 
@@ -430,20 +430,15 @@ public class SettingsFragment extends Fragment {
                 positive_button.setTypeface(typeface_medium);
                 negative_button.setTypeface(typeface_medium);
 
-                if (theme == AppCompatDelegate.MODE_NIGHT_NO)
-                {
+                if (theme == AppCompatDelegate.MODE_NIGHT_NO) {
                     alert_dialog_title.setTextColor(getResources().getColor(R.color.black));
                     alert_dialog_layout.setBackgroundColor(getResources().getColor(R.color.white));
                     negative_button.setTextColor(getResources().getColor(R.color.black));
-                }
-                else if (theme == AppCompatDelegate.MODE_NIGHT_YES)
-                {
+                } else if (theme == AppCompatDelegate.MODE_NIGHT_YES) {
                     alert_dialog_title.setTextColor(getResources().getColor(R.color.white));
                     alert_dialog_layout.setBackgroundColor(getResources().getColor(R.color.surface));
                     negative_button.setTextColor(getResources().getColor(R.color.white));
-                }
-                else
-                {
+                } else {
                     PowerManager powerManager = (PowerManager) getActivity().getSystemService(Context.POWER_SERVICE);
                     if (powerManager.isPowerSaveMode()) {
                         alert_dialog_title.setTextColor(getResources().getColor(R.color.white));
@@ -476,8 +471,7 @@ public class SettingsFragment extends Fragment {
 
                 positive_button.setOnClickListener(view120 -> {
 
-                    try
-                    {
+                    try {
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.macbitsgoa.bitsgridwatch")));
 
                         //shared preferences for current fragment
@@ -486,12 +480,9 @@ public class SettingsFragment extends Fragment {
                         current_fragment_editor.putInt("fragment", 1);
                         current_fragment_editor.apply();
 
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         Log.e("rate us error", "exception caught");
-                    }
-                    finally {
+                    } finally {
 
                         finalAlertDialog.dismiss();
                     }

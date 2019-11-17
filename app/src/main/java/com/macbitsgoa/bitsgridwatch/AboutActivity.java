@@ -109,8 +109,6 @@ public class AboutActivity extends AppCompatActivity {
         }
 
 
-
-
         //shared preferences for current fragment
         current_fragment = Objects.requireNonNull(this).getSharedPreferences("current_fragment", MODE_PRIVATE);
         current_fragment_editor = current_fragment.edit();
@@ -136,7 +134,6 @@ public class AboutActivity extends AppCompatActivity {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-
 
 
     }

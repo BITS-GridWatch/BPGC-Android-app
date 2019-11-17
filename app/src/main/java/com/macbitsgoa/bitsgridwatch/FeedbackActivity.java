@@ -126,7 +126,6 @@ public class FeedbackActivity extends AppCompatActivity {
         current_fragment_editor.apply();
 
 
-
         rating_bar.setNumStars(5);  //number of stars
         rating_bar.setStepSize(1);  //step size
 
@@ -144,8 +143,7 @@ public class FeedbackActivity extends AppCompatActivity {
         feedback_edit_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if (i == EditorInfo.IME_ACTION_DONE)
-                {
+                if (i == EditorInfo.IME_ACTION_DONE) {
                     InputMethodManager inputManager = (InputMethodManager)
                             getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -164,8 +162,7 @@ public class FeedbackActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if (rating_bar.getRating() == 0)
-                {
+                if (rating_bar.getRating() == 0) {
                     Toast toast = Toast.makeText(getApplicationContext(), "Please provide a rating.", Toast.LENGTH_SHORT);
                     toast.show();
                     return;
@@ -194,9 +191,9 @@ public class FeedbackActivity extends AppCompatActivity {
                 user_id.setValue(uid);
 
 
-                Log.d("rating","" + rating_bar.getRating());
+                Log.d("rating", "" + rating_bar.getRating());
                 Log.d("feedback", feedback_edit_text.getText().toString());
-                Toast toast = Toast.makeText(getApplicationContext(),"Your feedback has been sent.", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(getApplicationContext(), "Your feedback has been sent.", Toast.LENGTH_SHORT);
                 toast.show();
 
                 onBackPressed();
